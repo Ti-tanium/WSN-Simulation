@@ -44,7 +44,7 @@ class node(object):
         network[self.id].energy-=self.transimit_energy_loss(data)
         network[self.id].broadcast_count+=1;
         for i in reachable[self.id]:
-            if(slot==network[i].active_slot and not network[i].updated and network[i].state=='ready'):
+            if(slot in network[i].active_slot and not network[i].updated and network[i].state=='ready'):
                 ## simulating the receiving process of nodes
                 network[i].updated=True
                 network[i].state='receiving'
@@ -113,7 +113,7 @@ def init_network(N):
         plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
         plt.plot(x+radius*np.cos(theta),y+radius*np.sin(theta),c=('r' if i==0 else 'g'))
-        active_slot=random.randint(0,T-1)
+        active_slot=random.sample(range(0,T-1),round(T*D))
         # using fixed radius
         network.append(node(x,y,radius,active_slot,i))
     # sink node
@@ -151,7 +151,7 @@ def start_dissenminating(network):
             if(node.id==0 and i<T):
                 # sink node broadcast |T| times to ensure nodes near sink can receive the code
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
-            if(node.id>0 and node.updated==True and node.state=='ready' and node.active_slot==time_slot):
+            if(node.id>0 and node.updated==True and node.state=='ready' and time_slot in node.active_slot):
                 # not sink node, and it has the updated code, and it is neither broadcasting nor receiving code
                 # then broadcast code to the reachable nodes near it
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
@@ -171,7 +171,7 @@ def energy_loss(network):
     for node in network:
         energy_loss+=node.E0-node.energy
         broadcast_count+=node.broadcast_count
-    return energy_loss,broadcast_count
+    return energy_loss*10**(-6),broadcast_count
 
 network=init_network(N)
 collision_domain_init(network)
