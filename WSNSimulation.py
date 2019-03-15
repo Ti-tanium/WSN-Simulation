@@ -269,12 +269,15 @@ def run_sim(n,density_first=False):
         mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
     display_energy_consume_heatmap(network,mean_energy_remain)
     
+    #average time used to dissenminatie data
     mean_time="{:.3f}".format(sum(time)/len(time)) if len(time)!=0 else 0
-    mean_energy_comsume="{:.3f}".format(sum(energy)/len(energy)) if len(energy)!=0 else 0
+    # avaerage total energy comsumed
+    mean_total_energy_comsume="{:.3f}".format(sum(energy)/len(energy)) if len(energy)!=0 else 0
+    # average broadcast count
     mean_broadcast = "{:.3f}".format(sum(broadcast)/len(broadcast)) if len(broadcast)!=0 else 0
     print(str(completed_count)+" times completed in "+str(n)+" times simulation")
     print("Average time used:"+str(mean_time))
-    print("Average energy consumption:"+str(mean_energy_comsume))
+    print("Average total energy consumption:"+str(mean_total_energy_comsume))
     print("Average broadcasts count:"+str(mean_broadcast))
             
     
