@@ -111,8 +111,9 @@ def init_network(N):
     network=[]
     theta=np.linspace(0,2*np.pi,800)
     for i in range(N):
-        x=random.uniform(0,Xm)
-        y=random.uniform(0,Ym)
+        #x=random.uniform(0,Xm)
+        #y=random.uniform(0,Ym)
+        x,y=network_position[i]
         # plot node
         plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
