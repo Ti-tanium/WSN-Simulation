@@ -19,7 +19,7 @@ class node(object):
     amp_mpf=0.0013*10**(-3)
 
     #initial energy  nJ
-    E0=1000*10**(9)
+    E0=0.5*10**(9)
     def __init__(self,x,y,broadcast_radius,active_slot,_id):
         self.x=x
         self.y=y
@@ -109,8 +109,9 @@ def init_network(N):
     network=[]
     theta=np.linspace(0,2*np.pi,800)
     for i in range(N):
-        x=random.uniform(0,Xm)
-        y=random.uniform(0,Ym)
+#        x=random.uniform(0,Xm)
+#        y=random.uniform(0,Ym)
+        x,y=network_position_500[i]
         # plot node
         #plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
@@ -235,16 +236,17 @@ def display_energy_consume_heatmap(network,z):
 ## use the import variable to run the simulation
 ## if you did not have saved network,run the following two line
 ## network variables include:network,collision,reachable
-#network=init_network(N)
+
 
         
-def run_sim(n,network,density_first=False):
+def run_sim(n,density_first=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
     broadcast=[]
     completed_count=0
     energy_remain=[set() for i in range(0,N)]
+    network=init_network(N)
     collision_domain_init(network)
     for i in range(0,n):
         # after a simulation, the network is changed
