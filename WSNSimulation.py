@@ -139,7 +139,7 @@ def collision_domain_init(network):
                     reachable[i].add(j)
 
 
-
+# change the state of node to "ready"
 def renew_state(network):
     for node in network:
         node.state="ready"
