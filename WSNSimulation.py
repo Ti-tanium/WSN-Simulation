@@ -118,7 +118,7 @@ def init_network(N):
         plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
         plt.plot(x+radius*np.cos(theta),y+radius*np.sin(theta),c=('r' if i==0 else 'g'))
-        active_slot=random.sample(range(0,T-1),round(T*D))
+        active_slot=random.sample(range(0,T),round(T*D))
         # using fixed radius
         network.append(node(x,y,radius,active_slot,i))
     # sink node
