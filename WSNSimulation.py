@@ -228,20 +228,29 @@ def run_sim(n):
     energy=[]
     broadcast=[]
     completed_count=0
+    energy_remain=[set() for i in range(0,N)]
+    network=[]
     for i in range(0,n):
         network=init_network(N)
         collision_domain_init(network)
         updated_num,time_used=start_dissenminating(network)
         if(updated_num==N):
             # if the simulation completed code dissenmination(every node had been updated)
+            for node in network:
+                energy_remain[node.id].add(node.energy)
             completed_count+=1
             time.append(time_used)
             energy_los,broadcast_count=energy_loss(network)
             energy.append(energy_los)
             broadcast.append(broadcast_count)
-    mean_time="{:.3f}".format(sum(time)/len(time))
-    mean_energy_comsume="{:.3f}".format(sum(energy)/len(energy))
-    mean_broadcast="{:.3f}".format(sum(broadcast)/len(broadcast))
+    # calculate the average energy left for each node
+    mean_energy_remain=[0 for i in range(0,N)]
+    for i in range(0,N):
+        mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
+    display_energy_consume_heatmap(network,mean_energy_remain)
+    mean_time="{:.3f}".format(sum(time)/len(time)) if len(time)!=0 else 0
+    mean_energy_comsume="{:.3f}".format(sum(energy)/len(energy)) if len(energy)!=0 else 0
+    mean_broadcast = "{:.3f}".format(sum(broadcast)/len(broadcast)) if len(broadcast)!=0 else 0
     print(str(completed_count)+" times completed in "+str(n)+" times simulation")
     print("Average time used:"+str(mean_time))
     print("Average energy consumption:"+str(mean_energy_comsume))
