@@ -256,8 +256,73 @@ def run_sim(n):
     print("Average energy consumption:"+str(mean_energy_comsume))
     print("Average broadcasts count:"+str(mean_broadcast))
             
+    
+#1000 次
+#    N=100  Sort  T=6  D=2/6  radius=6 total_time=1000
+#        814 times completed in 1000 times simulation
+#        Average time used:15.539
+#        Average energy consumption:38.850
+#        Average broadcasts count:277.399 
+#    N=100  Sort  T=6  D=2/6  radius=6 total_time=100
+#        815 times completed in 1000 times simulation
+#        Average time used:15.664
+#        Average energy consumption:39.205
+#        Average broadcasts count:280.839
+    
+#    N=100  T=6  D=2/6  radius=6 total_time=1000
+#        818 times completed in 1000 times simulation
+#        Average time used:15.603
+#        Average energy consumption:37.787
+#        Average broadcasts count:267.092
+#    N=100  T=6  D=2/6  radius=6 total_time=100
+#        806 times completed in 1000 times simulation
+#        Average time used:15.617
+#        Average energy consumption:37.791
+#        Average broadcasts count:267.133
+#        
+#    
+#    N=100  T=6  D=2/6  radius=13 total_time=100      
+#        1000 times completed in 1000 times simulation
+#        Average time used:5.396
+#        Average energy consumption:18.361
+#        Average broadcasts count:76.712
 
 
 
- 
+# Test of raduis
+    
 
+
+# Test of duty cycle  1000 次
+
+#    N=100  T=6  D=2/6  radius=6 total_time=100
+#        806 times completed in 1000 times simulation
+#        Average time used:15.617
+#        Average energy consumption:37.791
+#        Average broadcasts count:267.133
+    
+#    N=100  T=6  D=3/6  radius=6 total_time=100
+#        999 times completed in 1000 times simulation
+#        Average time used:8.998
+#        Average energy consumption:35.046
+#        Average broadcasts count:240.514
+#        
+#    N=100  T=6  D=4/6  radius=6 total_time=100
+#        1000 times completed in 1000 times simulation
+#        Average time used:6.467
+#        Average energy consumption:31.092
+#        Average broadcasts count:202.179
+    
+#    N=100  T=6  D=5/6  radius=6 total_time=100
+#        1000 times completed in 1000 times simulation
+#        Average time used:5.096
+#        Average energy consumption:32.904
+#        Average broadcasts count:219.748
+#        广播次数变多 因为节点只要在活跃周期就要广播
+    
+#    N=100  T=6  D=5/6  radius=6 total_time=100
+#        1000 times completed in 1000 times simulation
+#        Average time used:4.000
+#        Average energy consumption:31.383
+#        Average broadcasts count:205.000
+#        
