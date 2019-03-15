@@ -217,12 +217,12 @@ def start_dissenminating(network,density_first):
 
 ## calculate the total energy lost of one dissenmination
 def energy_loss(network):
-    energy_loss=0
+    energy_loss=0    # mj
     broadcast_count=0
     for node in network:
         energy_loss+=node.E0-node.energy
         broadcast_count+=node.broadcast_count
-    return energy_loss*10**(-6),broadcast_count
+    return energy_loss,broadcast_count
 
 # display the energy heatmap
 def display_energy_consume_heatmap(network,z):
