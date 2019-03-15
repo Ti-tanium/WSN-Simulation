@@ -109,9 +109,8 @@ def init_network(N):
     network=[]
     theta=np.linspace(0,2*np.pi,800)
     for i in range(N):
-#        x=random.uniform(0,Xm)
-#        y=random.uniform(0,Ym)
-        x,y=network_position_500[i]
+        x=random.uniform(0,Xm)
+        y=random.uniform(0,Ym)
         # plot node
         #plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
@@ -225,19 +224,27 @@ def display_energy_consume_heatmap(network,z):
             "z":z
     })
     df.plot.hexbin(x='x',y='y',C='z',gridsize=10,figsize=(10,8))
+    
+def display_network(network):
+    theta=np.linspace(0,2*np.pi,800)
+    for node in network:
+        # plot node
+        plt.scatter(node.x,node.y,marker=('v' if node.id==0 else '.'),c=('r' if node.id==0 else 'g'))
+        # plot broadcast range
+        #plt.plot(node.x+radius*np.cos(theta),node.y+radius*np.sin(theta),c=('r' if node.id==0 else 'g'))
 
+
+#network=init_network(N)
         
-def run_sim(n,density_first=False):
+def run_sim(network,n,density_first=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
     broadcast=[]
     completed_count=0
     energy_remain=[set() for i in range(0,N)]
-    network=[]
+    collision_domain_init(network)
     for i in range(0,n):
-        network=init_network(N)
-        collision_domain_init(network)
         updated_num,time_used=start_dissenminating(network,density_first)
         if(updated_num==N):
             # if the simulation completed code dissenmination(every node had been updated)
@@ -257,6 +264,7 @@ def run_sim(n,density_first=False):
     mean_energy_comsume="{:.3f}".format(sum(energy)/len(energy)) if len(energy)!=0 else 0
     mean_broadcast = "{:.3f}".format(sum(broadcast)/len(broadcast)) if len(broadcast)!=0 else 0
     print(str(completed_count)+" times completed in "+str(n)+" times simulation")
+    print("Configuration:"+" N="+str(N)+" T="+str(T)+" D="+str(D)+" radius="+str(radius))
     print("Average time used:"+str(mean_time))
     print("Average energy consumption:"+str(mean_energy_comsume))
     print("Average broadcasts count:"+str(mean_broadcast))
