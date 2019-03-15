@@ -28,6 +28,7 @@ class node(object):
     
     #initial energy  mJ
     E0=0.5*10**(3)
+    
     def __init__(self,x,y,broadcast_radius,active_slot,_id):
         self.x=x
         self.y=y
@@ -37,8 +38,7 @@ class node(object):
         self.id=_id
         self.updated=False
         self.broadcast_count=0
-        self.parent=-1
-        # -1 means no parent node
+        self.parent=-1  # -1 means no parent node
         self.state='ready'
         # ready:ready to receve data or transimit data
         # receiving:current time slot is receiving data,therefore unable to broadcast
