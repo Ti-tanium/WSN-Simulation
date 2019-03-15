@@ -82,7 +82,7 @@ D=2/6
 
 
 # total time slot
-total_time=1000
+total_time=100
 
 # network range
 Xm=1000
@@ -109,9 +109,8 @@ def init_network(N):
     network=[]
     theta=np.linspace(0,2*np.pi,800)
     for i in range(N):
-#        x=random.uniform(0,Xm)
-#        y=random.uniform(0,Ym)
-        x,y=network_position_500[i]
+        x=random.uniform(0,Xm)
+        y=random.uniform(0,Ym)
         # plot node
         #plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
@@ -141,6 +140,15 @@ def collision_domain_init(network):
 def renew_state(network):
     for node in network:
         node.state="ready"
+# refresh the network for another simulation
+def refresh_network(network):
+    for i in range(0,N):
+        network[i].state="ready"
+        network[i].energy=network[i].E0
+        network[i].broadcast_radius=radius
+        network[i].updated=False
+        network[i].broadcast_count=0
+        network[i].parent=-1
 
 # sort the network according to the number of node it covers
 def QuickSort(net,firstIndex,lastIndex):
@@ -178,7 +186,6 @@ def start_dissenminating(network,density_first):
         time_slot=i%T
         # renew the state of the node
         renew_state(network)
-        
         # sort the network by the number of covered nodes
         if(density_first):
             sorted_network=sort_network(network)
@@ -225,19 +232,26 @@ def display_energy_consume_heatmap(network,z):
     })
     df.plot.hexbin(x='x',y='y',C='z',gridsize=10,figsize=(10,8))
 
+## use the import variable to run the simulation
+## if you did not have saved network,run the following two line
+## network variables include:network,collision,reachable
+#network=init_network(N)
+
         
-def run_sim(n,density_first=False):
+def run_sim(n,network,density_first=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
     broadcast=[]
     completed_count=0
     energy_remain=[set() for i in range(0,N)]
-    network=[]
+    collision_domain_init(network)
     for i in range(0,n):
-        network=init_network(N)
-        collision_domain_init(network)
+        # after a simulation, the network is changed
+        # so it needs to be refresh for another simulation
+        refresh_network(network)
         updated_num,time_used=start_dissenminating(network,density_first)
+        
         if(updated_num==N):
             # if the simulation completed code dissenmination(every node had been updated)
             for node in network:
@@ -247,7 +261,7 @@ def run_sim(n,density_first=False):
             energy_los,broadcast_count=energy_loss(network)
             energy.append(energy_los)
             broadcast.append(broadcast_count)
-    # calculate the average energy left for each node
+    ## calculate the average energy left for each node and draw heat map
     mean_energy_remain=[0 for i in range(0,N)]
     for i in range(0,N):
         mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
