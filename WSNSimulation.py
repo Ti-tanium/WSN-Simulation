@@ -72,24 +72,24 @@ class node(object):
 ## parameters
 
 #number of nodes in the natwork
-N=100
+N=500
 
 # working period
 T=6
 
 # Duty cycle of the node
-D=0.6
+D=2/6
 
 
 # total time slot
 total_time=1000
 
 # network range
-Xm=25
-Ym=25
+Xm=1000
+Ym=1000
 
 # fixed broadcast radius
-radius=6
+radius=120
 
 # the amount of data to be transmitted (bit)
 Data=2048
@@ -211,7 +211,6 @@ def energy_loss(network):
     return energy_loss*10**(-6),broadcast_count
 
 # display the energy heatmap
-
 def display_energy_consume_heatmap(network,z):
     x=[]
     y=[]
@@ -260,6 +259,7 @@ def run_sim(network,n,density_first=False):
     for i in range(0,N):
         mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
     display_energy_consume_heatmap(network,mean_energy_remain)
+    
     mean_time="{:.3f}".format(sum(time)/len(time)) if len(time)!=0 else 0
     mean_energy_comsume="{:.3f}".format(sum(energy)/len(energy)) if len(energy)!=0 else 0
     mean_broadcast = "{:.3f}".format(sum(broadcast)/len(broadcast)) if len(broadcast)!=0 else 0
