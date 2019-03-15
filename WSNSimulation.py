@@ -18,8 +18,8 @@ class node(object):
     #amplification loss for the Multi-path Fading Model  pj/bit/m4
     amp_mpf=0.0013*10**(-3)
 
-    #initial energy  J
-    E0=0.5*10**(9)
+    #initial energy  nJ
+    E0=1000*10**(9)
     def __init__(self,x,y,broadcast_radius,active_slot,_id):
         self.x=x
         self.y=y
