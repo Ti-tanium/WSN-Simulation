@@ -144,6 +144,34 @@ def renew_state(network):
     for node in network:
         node.state="ready"
 
+# sort the network according to the number of node it covers
+def QuickSort(net,firstIndex,lastIndex):
+    if firstIndex<lastIndex:
+        divIndex=Partition(net,firstIndex,lastIndex)
+        QuickSort(net,firstIndex,divIndex)       
+        QuickSort(net,divIndex+1,lastIndex)
+    else:
+        return
+ 
+ 
+def Partition(net,firstIndex,lastIndex):
+    i=firstIndex-1
+    for j in range(firstIndex,lastIndex):
+        if len(reachable[net[j].id])>=len(reachable[net[lastIndex].id]):
+            i=i+1
+            net[i],net[j]=net[j],net[i]
+    net[i+1],net[lastIndex]=net[lastIndex],net[i+1]
+    return i
+
+def sort_network(network):
+    sorted_network=[]
+    for node in network:
+        sorted_network.append(node)
+    QuickSort(sorted_network,0,len(sorted_network)-1)
+    return sorted_network
+    
+
+
 ## sink node start disseminating code
 def start_dissenminating(network):
     ## total count of nodes already updated its code
@@ -152,6 +180,8 @@ def start_dissenminating(network):
         time_slot=i%T
         # renew the state of the node
         renew_state(network)
+        # sort the network by the number of covered nodes
+        #sorted_network=sort_network(network)
         for node in network:
             if(node.id==0 and i<T):
                 # sink node broadcast |T| times to ensure nodes near sink can receive the code
