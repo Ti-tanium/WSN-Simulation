@@ -1,6 +1,7 @@
 import random
 import numpy as np
 import pandas as pd
+import math
 import matplotlib.pyplot as plt
 plt.figure(figsize=(8,8))
 
@@ -127,6 +128,7 @@ def init_network(N):
         # plot broadcast range
         #plt.plot(x+radius*np.cos(theta),y+radius*np.sin(theta),c=('r' if i==0 else 'g'))
         active_slot=random.sample(range(0,T),round(T*D))
+        
         # using fixed radius
         network.append(node(x,y,radius,active_slot,i))
     # sink node
@@ -195,10 +197,16 @@ def adapt_dutyCycle(network):
         # calculate adaptive duty cycle
         duty_cycle=network[i].energy/network[i].E0
         network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
-
+        
+# adaptive broadcast radius
+def adapt_radius(network):
+    # skip sink node (node.id=0)
+    for i in range(1,N):
+        distance=((network[0].x-network[i].x)**2+(network[0].y-network[i].y)**2)**(1/2)
+        #network[i].broadcast_radius=0.8*Xm*(1-network[i].broadcast_radius/distance)
 
 ## sink node start disseminating code
-def start_dissenminating(network,density_first,adaptive_duty_cycle):
+def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radius):
     ## total count of nodes already updated its code
     updated_num=0
     for i in range(total_time):
@@ -214,6 +222,10 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle):
         #whether use adaptive duty cycle scheme
         if(adaptive_duty_cycle):
             adapt_dutyCycle(network)
+        
+        #whether use adaptive braodcast radius scheme
+        if(adaptive_radius):
+            adapt_radius(network)
         
         for node in sorted_network:
             if(node.id==0 and i<T):
@@ -292,7 +304,7 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
         # after a simulation, the network is changed
         # so it needs to be refresh for another simulation
         refresh_network(network)
-        updated_num,time_used=start_dissenminating(network,density_first,adaptive_duty_cycle)
+        updated_num,time_used=start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radius)
         
         if(updated_num==N):
             # if the simulation completed code dissenmination(every node had been updated)
