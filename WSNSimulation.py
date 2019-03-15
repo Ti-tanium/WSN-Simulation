@@ -6,20 +6,25 @@ plt.figure(figsize=(8,8))
 
 class node(object):
     __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state')
-    #threshold distance  m
-    thr_distance=87
-
-    #energy of transimitting circuit loss  nJ/bit
-    energy_trans=50
-
-    #amp_lification loss for the Free Space Model  pJ/bit/m2
-    amp_fs=10*10**(-3)
-
-    #amplification loss for the Multi-path Fading Model  pj/bit/m4
-    amp_mpf=0.0013*10**(-3)
-
-    #initial energy  nJ
-    E0=0.5*10**(9)
+    
+    # effective data receive/forward speed  bps
+    speed=16*10**6
+    
+    # Power Consumption of receive  mW
+    receive_consumption=303.6
+    
+    # Power Consumption of transimit mW
+    transimit_consumption=617.1
+    
+    # Power Consumption of idle mW
+    idle_consumption=230
+    
+    # start up energy  mj
+    # igore the start up energy for now
+    start_up_energy=299
+    
+    #initial energy  mJ
+    E0=0.5*10**(3)
     def __init__(self,x,y,broadcast_radius,active_slot,_id):
         self.x=x
         self.y=y
@@ -58,12 +63,13 @@ class node(object):
         
     # calculating the energy loss of transimiting (data) bit code
     def transimit_energy_loss(self,data):
-        energy_loss=data*self.energy_trans+data*self.amp_fs*self.broadcast_radius**2 if self.broadcast_radius<self.thr_distance else data*self.energy_trans+data*self.amp_mpf*self.broadcast_radius**4
-        return energy_loss
+        time=data/self.speed
+        return time*self.transimit_consumption
         
     # calculating the energy loss of receiving (data) bit code
     def receive_energy_loss(self,data):
-        return data*self.energy_trans
+        time=data/self.speed
+        return time*self.receive_consumption
         
         
             
@@ -92,7 +98,7 @@ Ym=1000
 radius=120
 
 # the amount of data to be transmitted (bit)
-Data=2048
+Data=1024*1024*1
 
 ## global variable
 
