@@ -208,20 +208,18 @@ def energy_loss(network):
 
 # display the energy heatmap
 
-def display_energy_consume_heatmap(network):
+def display_energy_consume_heatmap(network,z):
     x=[]
     y=[]
-    z=[]
     for node in network:
         x.append(node.x)
         y.append(node.y)
-        z.append(node.E0-node.energy)
-        df=pd.DataFrame({
-                "x":x,
-                "y":y,
-                "z":z
-        })
-    df.plot.hexbin(x='x',y='y',C='z',gridsize=10)
+    df=pd.DataFrame({
+            "x":x,
+            "y":y,
+            "z":z
+    })
+    df.plot.hexbin(x='x',y='y',C='z',gridsize=10,figsize=(10,8))
 
         
 def run_sim(n):
