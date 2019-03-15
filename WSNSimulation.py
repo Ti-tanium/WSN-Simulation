@@ -171,16 +171,21 @@ def sort_network(network):
 
 
 ## sink node start disseminating code
-def start_dissenminating(network):
+def start_dissenminating(network,density_first):
     ## total count of nodes already updated its code
     updated_num=0
     for i in range(total_time):
         time_slot=i%T
         # renew the state of the node
         renew_state(network)
+        
         # sort the network by the number of covered nodes
-        #sorted_network=sort_network(network)
-        for node in network:
+        if(density_first):
+            sorted_network=sort_network(network)
+        else:
+            sorted_network=network
+        
+        for node in sorted_network:
             if(node.id==0 and i<T):
                 # sink node broadcast |T| times to ensure nodes near sink can receive the code
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
@@ -222,7 +227,7 @@ def display_energy_consume_heatmap(network,z):
     df.plot.hexbin(x='x',y='y',C='z',gridsize=10,figsize=(10,8))
 
         
-def run_sim(n):
+def run_sim(n,density_first=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
@@ -233,7 +238,7 @@ def run_sim(n):
     for i in range(0,n):
         network=init_network(N)
         collision_domain_init(network)
-        updated_num,time_used=start_dissenminating(network)
+        updated_num,time_used=start_dissenminating(network,density_first)
         if(updated_num==N):
             # if the simulation completed code dissenmination(every node had been updated)
             for node in network:
