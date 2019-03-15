@@ -183,9 +183,18 @@ def sort_network(network):
     QuickSort(sorted_network,0,len(sorted_network)-1)
     return sorted_network
 
+# adaptive duty cycle
+def adapt_dutyCycle(network):
+    for i in range(0,N):
+        # clear duty cycle
+        network[i].active_slot.clear()
+        # calculate adaptive duty cycle
+        duty_cycle=network[i].energy/network[i].E0
+        network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
+
 
 ## sink node start disseminating code
-def start_dissenminating(network,density_first):
+def start_dissenminating(network,density_first,adaptive_duty_cycle):
     ## total count of nodes already updated its code
     updated_num=0
     for i in range(total_time):
@@ -197,6 +206,10 @@ def start_dissenminating(network,density_first):
             sorted_network=sort_network(network)
         else:
             sorted_network=network
+        
+        #whether use adaptive duty cycle scheme
+        if(adaptive_duty_cycle):
+            adapt_dutyCycle(network)
         
         for node in sorted_network:
             if(node.id==0 and i<T):
@@ -239,7 +252,7 @@ def display_energy_consume_heatmap(network,z):
     df.plot.hexbin(x='x',y='y',C='z',gridsize=10,figsize=(10,8))
         
 
-def run_sim(n,density_first=False):
+def run_sim(n,density_first=False,adaptive_duty_cycle=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
@@ -252,7 +265,7 @@ def run_sim(n,density_first=False):
         # after a simulation, the network is changed
         # so it needs to be refresh for another simulation
         refresh_network(network)
-        updated_num,time_used=start_dissenminating(network,density_first)
+        updated_num,time_used=start_dissenminating(network,density_first,adaptive_duty_cycle)
         
         if(updated_num==N):
             # if the simulation completed code dissenmination(every node had been updated)
