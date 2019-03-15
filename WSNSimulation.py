@@ -23,6 +23,9 @@ class node(object):
     # igore the start up energy for now
     start_up_energy=299
     
+    # the duration of time slot  s
+    duration=0.25
+    
     #initial energy  mJ
     E0=0.5*10**(3)
     def __init__(self,x,y,broadcast_radius,active_slot,_id):
@@ -70,9 +73,10 @@ class node(object):
     def receive_energy_loss(self,data):
         time=data/self.speed
         return time*self.receive_consumption
-        
-        
-            
+    
+    # simulate idle state
+    def idle_energy_loss(self,data):
+        self.energy-self.duration*self.idle_consumption
         
 
 ## parameters
@@ -219,6 +223,10 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle):
                 # not sink node, and it has the updated code, and it is neither broadcasting nor receiving code
                 # then broadcast code to the reachable nodes near it
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
+            
+            if(time_slot in node.active_slot and node.updated==False and node.state=="ready"):
+                # node is active but don't have data to broadcast neither is receiving data
+                node.idle_energy_loss(Data)
             
             ## whether all the nodes in the network had updated their code
             if(updated_num==N):
