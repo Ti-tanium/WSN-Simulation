@@ -16,7 +16,7 @@ class node(object):
     amp_fs=10*10**(-3)
 
     #amplification loss for the Multi-path Fading Model  pj/bit/m4
-    amp_mpf=0.0013
+    amp_mpf=0.0013*10**(-3)
 
     #initial energy  J
     E0=0.5*10**(9)
