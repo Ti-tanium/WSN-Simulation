@@ -42,7 +42,7 @@ class node(object):
                 print("collision:node "+str(self.id)+" + node "+str(network[i].id))
                 return updated_num
         network[self.id].state='broadcasting'
-        print("node "+str(self.id)+" start broadcasting")
+        #print("node "+str(self.id)+" start broadcasting")
         network[self.id].energy-=self.transimit_energy_loss(data)
         network[self.id].broadcast_count+=1;
         for i in reachable[self.id]:
@@ -51,7 +51,7 @@ class node(object):
                 network[i].updated=True
                 network[i].state='receiving'
                 updated_num+=1
-                print("node "+str(network[i].id)+" start receiving")
+                #print("node "+str(network[i].id)+" start receiving")
                 network[i].energy-=self.receive_energy_loss(data)
         network[self.id].state='ready'
         return updated_num
@@ -113,9 +113,9 @@ def init_network(N):
         #y=random.uniform(0,Ym)
         x,y=network_position[i]
         # plot node
-        plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
+        #plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
-        plt.plot(x+radius*np.cos(theta),y+radius*np.sin(theta),c=('r' if i==0 else 'g'))
+        #plt.plot(x+radius*np.cos(theta),y+radius*np.sin(theta),c=('r' if i==0 else 'g'))
         active_slot=random.sample(range(0,T),round(T*D))
         # using fixed radius
         network.append(node(x,y,radius,active_slot,i))
