@@ -182,7 +182,6 @@ def sort_network(network):
         sorted_network.append(node)
     QuickSort(sorted_network,0,len(sorted_network)-1)
     return sorted_network
-    
 
 
 ## sink node start disseminating code
@@ -238,13 +237,8 @@ def display_energy_consume_heatmap(network,z):
             "z":z
     })
     df.plot.hexbin(x='x',y='y',C='z',gridsize=10,figsize=(10,8))
-
-## use the import variable to run the simulation
-## if you did not have saved network,run the following two line
-## network variables include:network,collision,reachable
-
-
         
+
 def run_sim(n,density_first=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
