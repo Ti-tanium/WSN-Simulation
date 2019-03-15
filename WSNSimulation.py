@@ -269,7 +269,7 @@ def display_net(network):
         plt.plot(node.x+radius*np.cos(theta),node.y+radius*np.sin(theta),c=('r' if node.id==0 else 'g'))
     
 
-def run_sim(n,density_first=False,adaptive_duty_cycle=False):
+def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
@@ -277,6 +277,16 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False):
     completed_count=0
     energy_remain=[set() for i in range(0,N)]
     network=init_network(N)
+    #using ABRCD scheme to adapt radius acording to the distance between node i and sink
+    if(ABRCD):
+        #ABRCD scheme parameters
+        q=3
+        r=100
+        for i in range(1,N):
+            distance=((network[0].x-network[i].x)**2+(network[0].y-network[i].y)**2)**(1/2)
+            layer=math.ceil(math.log(1+distance*(q-1)/r,q))
+            network[i].broadcast_radius=r*q**(layer-1)
+    #display_net(network)
     collision_domain_init(network)
     for i in range(0,n):
         # after a simulation, the network is changed
