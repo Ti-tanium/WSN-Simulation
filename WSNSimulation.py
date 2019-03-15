@@ -194,9 +194,9 @@ def start_dissenminating(network):
             ## whether all the nodes in the network had updated their code
             if(updated_num==N):
                 print("Done dissenminating code!")
-                return updated_num
+                return updated_num,i
     print("Terminated.")
-    return updated_num
+    return updated_num,total_time
                     
 
 ## calculate the total energy lost of one dissenmination
