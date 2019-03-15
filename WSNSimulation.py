@@ -258,7 +258,16 @@ def display_energy_consume_heatmap(network,z):
             "z":z
     })
     df.plot.hexbin(x='x',y='y',C='z',gridsize=10,figsize=(10,8))
-        
+    
+# display node distribution and radius
+def display_net(network):
+    theta=np.linspace(0,2*np.pi,800)
+    for node in network:
+        # plot node
+        plt.scatter(node.x,node.y,marker=('v' if node.id==0 else '.'),c=('r' if node.id==0 else 'g'))
+        # plot broadcast range
+        plt.plot(node.x+radius*np.cos(theta),node.y+radius*np.sin(theta),c=('r' if node.id==0 else 'g'))
+    
 
 def run_sim(n,density_first=False,adaptive_duty_cycle=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
