@@ -173,6 +173,51 @@ def energy_loss(network):
         broadcast_count+=node.broadcast_count
     return energy_loss*10**(-6),broadcast_count
 
-network=init_network(N)
-collision_domain_init(network)
-updated_num=start_dissenminating(network)
+# display the energy heatmap
+
+def display_energy_consume_heatmap(network):
+    x=[]
+    y=[]
+    z=[]
+    for node in network:
+        x.append(node.x)
+        y.append(node.y)
+        z.append(node.E0-node.energy)
+        df=pd.DataFrame({
+                "x":x,
+                "y":y,
+                "z":z
+        })
+    df.plot.hexbin(x='x',y='y',C='z',gridsize=10)
+
+        
+def run_sim(n):
+    # simulate n time and get the mean energy comsumption and broadcasts count
+    time=[]
+    energy=[]
+    broadcast=[]
+    completed_count=0
+    for i in range(0,n):
+        network=init_network(N)
+        collision_domain_init(network)
+        updated_num,time_used=start_dissenminating(network)
+        if(updated_num==N):
+            # if the simulation completed code dissenmination(every node had been updated)
+            completed_count+=1
+            time.append(time_used)
+            energy_los,broadcast_count=energy_loss(network)
+            energy.append(energy_los)
+            broadcast.append(broadcast_count)
+    mean_time="{:.3f}".format(sum(time)/len(time))
+    mean_energy_comsume="{:.3f}".format(sum(energy)/len(energy))
+    mean_broadcast="{:.3f}".format(sum(broadcast)/len(broadcast))
+    print(str(completed_count)+" times completed in "+str(n)+" times simulation")
+    print("Average time used:"+str(mean_time))
+    print("Average energy consumption:"+str(mean_energy_comsume))
+    print("Average broadcasts count:"+str(mean_broadcast))
+            
+
+
+
+ 
+
