@@ -192,6 +192,13 @@ def sort_network(network):
     QuickSort(sorted_network,0,len(sorted_network)-1)
     return sorted_network
 
+def neighbor():
+    neighbor_count=[]
+    for i in range(N):
+        neighbor_count.append(len(reachable[i]))
+    mean_neighbor=sum(neighbor_count)/N
+    max_neighbor=max(neighbor_count)
+    return mean_neighbor,max_neighbor
 
 def distance_cal(network):
     for i in range(N):
@@ -204,11 +211,14 @@ def distance_cal(network):
 
 # adaptive duty cycle
 def adapt_dutyCycle(network):
+    # mean_neighbor,max_neighbor=neighbor()
+    mean_distance,max_distance=distance_cal(network)
     for i in range(0,N):
         # clear duty cycle
         network[i].active_slot.clear()
         # calculate adaptive duty cycle
-        duty_cycle=network[i].energy/network[i].E0
+        Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else 1-distance[i]/max_distance
+        duty_cycle=1/T+Ck*(1-1/T)
         network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
         
 # adaptive broadcast radius
