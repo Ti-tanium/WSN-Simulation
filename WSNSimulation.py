@@ -113,6 +113,9 @@ collision=[set() for i in range(N)]
 # record reachable node of i
 reachable=[set() for i in range(N)]
 
+# record the distance between node and sink
+distance=[0 for i in range(N)]
+
 plt.rcParams['figure.figsize'] = (16, 16) # 设置figure_size尺寸
 
 ## init a network with fixed broadcast radius
@@ -188,6 +191,16 @@ def sort_network(network):
         sorted_network.append(node)
     QuickSort(sorted_network,0,len(sorted_network)-1)
     return sorted_network
+
+
+def distance_cal(network):
+    for i in range(N):
+        Dsi=((network[i].x-network[0].x)**2+(network[i].y-network[0].y)**2)**0.5
+        distance[network[i].id]=Dsi
+    mean_distance=sum(distance)/N
+    max_distance=max(distance)
+#    min_distance=min(distance)
+    return mean_distance,max_distance
 
 # adaptive duty cycle
 def adapt_dutyCycle(network):
