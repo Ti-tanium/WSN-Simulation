@@ -203,7 +203,7 @@ def adapt_radius(network):
     # skip sink node (node.id=0)
     for i in range(1,N):
         distance=((network[0].x-network[i].x)**2+(network[0].y-network[i].y)**2)**(1/2)
-        #network[i].broadcast_radius=0.8*Xm*(1-network[i].broadcast_radius/distance)
+        network[i].broadcast_radius=0.8*Xm*((1-network[i].broadcast_radius/distance)**2)**(1/2)
 
 ## sink node start disseminating code
 def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radius):
