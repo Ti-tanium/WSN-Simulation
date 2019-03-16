@@ -76,7 +76,7 @@ class node(object):
         return time*self.receive_consumption
     
     # simulate idle state
-    def idle_energy_loss(self,data):
+    def idle_energy_loss(self):
         self.energy-self.duration*self.idle_consumption
         
 
@@ -261,7 +261,7 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radi
             
             if(time_slot in node.active_slot and node.updated==False and node.state=="ready"):
                 # node is active but don't have data to broadcast neither is receiving data
-                node.idle_energy_loss(Data)
+                node.idle_energy_loss()
             
             ## whether all the nodes in the network had updated their code
             if(updated_num==N):
