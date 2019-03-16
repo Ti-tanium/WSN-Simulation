@@ -328,6 +328,8 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     # average broadcast count
     mean_broadcast = "{:.3f}".format(sum(broadcast)/len(broadcast)) if len(broadcast)!=0 else 0
     print(str(completed_count)+" times completed in "+str(n)+" times simulation")
+    print("Net configuration:"+"N="+str(N)+" T="+str(T)+" D="+str("{:.3f}".format(D))+" r="+str(radius))
+    print("Scheme:"," ABRCD" if ABRCD else ""," Adaptive Radius" if adaptive_radius else ""," Adaptive Duty Cycle" if adaptive_duty_cycle else "")
     print("Average time used:"+str(mean_time))
     print("Average total energy consumption:"+str(mean_total_energy_comsume))
     print("Average broadcasts count:"+str(mean_broadcast))
