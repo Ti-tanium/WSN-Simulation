@@ -113,9 +113,6 @@ collision=[set() for i in range(N)]
 # record reachable node of i
 reachable=[set() for i in range(N)]
 
-# record the distance between node and sink
-distance=[0 for i in range(N)]
-
 plt.rcParams['figure.figsize'] = (16, 16) # 设置figure_size尺寸
 
 ## init a network with fixed broadcast radius
@@ -196,23 +193,21 @@ def neighbor():
     neighbor_count=[]
     for i in range(N):
         neighbor_count.append(len(reachable[i]))
-    mean_neighbor=sum(neighbor_count)/N
-    max_neighbor=max(neighbor_count)
-    return mean_neighbor,max_neighbor
+    return neighbor_count
 
 def distance_cal(network):
+    distance=[0 for i in range(N)]
     for i in range(N):
         Dsi=((network[i].x-network[0].x)**2+(network[i].y-network[0].y)**2)**0.5
         distance[network[i].id]=Dsi
-    mean_distance=sum(distance)/N
-    max_distance=max(distance)
-#    min_distance=min(distance)
-    return mean_distance,max_distance
+    return distance
 
 # adaptive duty cycle
-def adapt_dutyCycle(network):
+def adapt_dutyCycle3(network):
     # mean_neighbor,max_neighbor=neighbor()
-    mean_distance,max_distance=distance_cal(network)
+    distance=distance_cal(network)
+    mean_distance=sum(distance)/N
+    max_distance=max(distance)
     for i in range(0,N):
         # clear duty cycle
         network[i].active_slot.clear()
@@ -221,13 +216,30 @@ def adapt_dutyCycle(network):
         duty_cycle=1/T+Ck*(1-1/T)
         network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
         
+def adapt_dutyCycle4(network):
+    distance=distance_cal(network)
+    mean_distance=sum(distance)/N
+    max_distance=max(distance)
+    neighbor_count=neighbor();
+    for i in range(0,N):
+        # clear duty cycle
+        network[i].active_slot.clear()
+        # calculate adaptive duty cycle
+#        Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else neighbor_count[i]/max(neighbor_count)
+#        duty_cycle=1/T+Ck*(1-1/T)
+        duty_cycle=network[i].energy/network[i].E0
+        network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
+    
+
 # adaptive broadcast radius
 def adapt_radius(network):
     # skip sink node (node.id=0)
+    distance=distance_cal(network)
+    mean_distance=sum(distance)/N
+    max_distance=max(distance)
     for i in range(1,N):
-        distance=((network[0].x-network[i].x)**2+(network[0].y-network[i].y)**2)**(1/2)
-        network[i].broadcast_radius=0.8*Xm*((1-network[i].broadcast_radius/distance)**2)**(1/2)
-
+        Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else distance[i]/max_distance
+        network[i].broadcast_radius=90+Ck*(Xm-90)
 ## sink node start disseminating code
 def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radius):
     ## total count of nodes already updated its code
@@ -244,7 +256,7 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radi
         
         #whether use adaptive duty cycle scheme
         if(adaptive_duty_cycle):
-            adapt_dutyCycle(network)
+            adapt_dutyCycle4(network)
         
         #whether use adaptive braodcast radius scheme
         if(adaptive_radius):
@@ -347,14 +359,14 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     #average time used to dissenminatie data
     mean_time="{:.3f}".format(sum(time)/len(time)) if len(time)!=0 else 0
     # avaerage total energy comsumed
-    mean_total_energy_comsume="{:.3f}".format(sum(energy)/len(energy)) if len(energy)!=0 else 0
+    mean_energy_consumption="{:.3f}".format(sum(energy)/len(energy)) if len(energy)!=0 else 0
     # average broadcast count
     mean_broadcast = "{:.3f}".format(sum(broadcast)/len(broadcast)) if len(broadcast)!=0 else 0
     print(str(completed_count)+" times completed in "+str(n)+" times simulation")
     print("Net configuration:"+"N="+str(N)+" T="+str(T)+" D="+str("{:.3f}".format(D))+" r="+str(radius))
     print("Scheme:"," ABRCD" if ABRCD else ""," Adaptive Radius" if adaptive_radius else ""," Adaptive Duty Cycle" if adaptive_duty_cycle else "")
-    print("Average time used:"+str(mean_time))
-    print("Average total energy consumption:"+str(mean_total_energy_comsume))
+    print("Average Broadcast Delay:"+str(mean_time))
+    print("Average Total Energy consumption:"+mean_energy_consumption)
     print("Average broadcasts count:"+str(mean_broadcast))
             
     
