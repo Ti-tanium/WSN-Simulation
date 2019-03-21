@@ -357,19 +357,25 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     for i in range(0,N):
         mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
     display_energy_consume_heatmap(network,mean_energy_remain)
-    
+    # variance of energy consumptions
+    variance=0
+    average=sum(mean_energy_remain)/len(mean_energy_remain)
+    for i in range(N):
+        variance+=(mean_energy_remain[i]-average)**2/N
     #average time used to dissenminatie data
     mean_time="{:.3f}".format(sum(time)/len(time)) if len(time)!=0 else 0
     # avaerage total energy comsumed
     mean_energy_consumption="{:.3f}".format(sum(energy)/len(energy)) if len(energy)!=0 else 0
     # average broadcast count
     mean_broadcast = "{:.3f}".format(sum(broadcast)/len(broadcast)) if len(broadcast)!=0 else 0
+
     print(str(completed_count)+" times completed in "+str(n)+" times simulation")
     print("Net configuration:"+"N="+str(N)+" T="+str(T)+" D="+str("{:.3f}".format(D))+" r="+str(radius))
     print("Scheme:"," ABRCD" if ABRCD else ""," Adaptive Radius" if adaptive_radius else ""," Adaptive Duty Cycle" if adaptive_duty_cycle else "")
     print("Average Broadcast Delay:"+str(mean_time))
     print("Average Total Energy consumption:"+mean_energy_consumption)
     print("Average broadcasts count:"+str(mean_broadcast))
+    print("Standard Deviation of energy remain:"+str(variance**(0.5)))
             
     
 #1000 次
