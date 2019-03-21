@@ -203,7 +203,7 @@ def distance_cal(network):
     return distance
 
 # adaptive duty cycle
-def adapt_dutyCycle3(network):
+def adapt_dutyCycle1(network):
     # mean_neighbor,max_neighbor=neighbor()
     distance=distance_cal(network)
     mean_distance=sum(distance)/N
@@ -212,8 +212,7 @@ def adapt_dutyCycle3(network):
         # clear duty cycle
         network[i].active_slot.clear()
         # calculate adaptive duty cycle
-        Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else 1-distance[i]/max_distance
-        duty_cycle=1/T+Ck*(1-1/T)
+        duty_cycle=network[i].energy/network[i].E0
         network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
         
 def adapt_dutyCycle4(network):
@@ -224,10 +223,9 @@ def adapt_dutyCycle4(network):
     for i in range(0,N):
         # clear duty cycle
         network[i].active_slot.clear()
-        # calculate adaptive duty cycle
-#        Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else neighbor_count[i]/max(neighbor_count)
-#        duty_cycle=1/T+Ck*(1-1/T)
-        duty_cycle=network[i].energy/network[i].E0
+#         calculate adaptive duty cycle
+        Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else neighbor_count[i]/max(neighbor_count)
+        duty_cycle=1/T+Ck*(1-1/T)
         network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
     
 
