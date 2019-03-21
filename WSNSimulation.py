@@ -307,11 +307,15 @@ def display_energy_consume_heatmap(network,z):
 # display node distribution and radius
 def display_net(network):
     theta=np.linspace(0,2*np.pi,800)
+    fig,ax=plt.subplots(figsize=(12,12))
+
     for node in network:
         # plot node
-        plt.scatter(node.x,node.y,marker=('v' if node.id==0 else '.'),c=('r' if node.id==0 else 'g'))
+        ax.scatter(node.x,node.y,linewidths=8,marker=('v' if node.id==0 else '.'),c=('r' if node.id==0 else 'g'))
         # plot broadcast range
-        plt.plot(node.x+radius*np.cos(theta),node.y+radius*np.sin(theta),c=('r' if node.id==0 else 'g'))
+        #plt.plot(node.x+radius*np.cos(theta),node.y+radius*np.sin(theta),c=('r' if node.id==0 else 'g'))
+    fig.show()
+        
     
 
 def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False):
