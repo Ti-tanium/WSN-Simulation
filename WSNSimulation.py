@@ -9,7 +9,7 @@ class node(object):
     __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state')
     
     # effective data receive/forward speed  bps
-    speed=16*10**6
+    speed=16*1024*1024
     
     # Power Consumption of receive  mW
     receive_consumption=303.6
@@ -25,10 +25,23 @@ class node(object):
     start_up_energy=299
     
     # the duration of time slot  s
-    duration=0.25
+    duration=0.1
     
     #initial energy  mJ
-    E0=0.5*10**(3)
+    E0=10**(3)
+    
+    
+    ## First Order Radio Model
+    # energy disspation of radio  mj/bit
+    E_elec=50*10**(-9)
+    
+    # transmit amplifier   mj/bit/m2
+    E_amp=100*10**(-12)
+    
+    # power consumption in idle state   W
+    P_idle=1.15
+    
+    #
     
     def __init__(self,x,y,broadcast_radius,active_slot,_id):
         self.x=x
@@ -67,17 +80,22 @@ class node(object):
         
     # calculating the energy loss of transimiting (data) bit code
     def transimit_energy_loss(self,data):
-        time=data/self.speed
-        return time*self.transimit_consumption
+#        time=data/self.speed
+#        return time*self.transimit_consumption
+        # first order radio model
+        return data*self.E_elec+data*self.broadcast_radius**(2)*self.E_amp
         
     # calculating the energy loss of receiving (data) bit code
     def receive_energy_loss(self,data):
-        time=data/self.speed
-        return time*self.receive_consumption
+#        time=data/self.speed
+#        return time*self.receive_consumption
+        # first order radio model
+        return data*self.E_elec
     
     # simulate idle state
     def idle_energy_loss(self):
-        self.energy-self.duration*self.idle_consumption
+#        self.energy-self.duration*self.idle_consumption
+        self.energy-self.duration*self.P_idle
         
 
 ## parameters
@@ -317,6 +335,7 @@ def display_net(network):
     fig.show()
         
     
+network=init_network(N)
 
 def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
