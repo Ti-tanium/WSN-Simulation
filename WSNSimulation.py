@@ -138,9 +138,9 @@ def init_network(N):
     network=[]
     theta=np.linspace(0,2*np.pi,800)
     for i in range(N):
-#        x=random.uniform(0,Xm)
-#        y=random.uniform(0,Ym)
-        x,y=network_position_500[i]
+        x=random.uniform(0,Xm)
+        y=random.uniform(0,Ym)
+        #x,y=network_position_500[i]
         # plot node
         #plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
@@ -375,7 +375,7 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     mean_energy_remain=[0 for i in range(0,N)]
     for i in range(0,N):
         mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
-    #display_energy_consume_heatmap(network,mean_energy_remain)
+    display_energy_consume_heatmap(network,mean_energy_remain)
     # variance of energy consumptions
     variance=0
     average=sum(mean_energy_remain)/len(mean_energy_remain)
@@ -396,73 +396,3 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     print("Average broadcasts count:"+str(mean_broadcast))
     print("Standard Deviation of energy remain:"+str(variance**(0.5)))
             
-    
-#1000 次
-#    N=100  Sort  T=6  D=2/6  radius=6 total_time=1000
-#        814 times completed in 1000 times simulation
-#        Average time used:15.539
-#        Average energy consumption:38.850
-#        Average broadcasts count:277.399 
-#    N=100  Sort  T=6  D=2/6  radius=6 total_time=100
-#        815 times completed in 1000 times simulation
-#        Average time used:15.664
-#        Average energy consumption:39.205
-#        Average broadcasts count:280.839
-    
-#    N=100  T=6  D=2/6  radius=6 total_time=1000
-#        818 times completed in 1000 times simulation
-#        Average time used:15.603
-#        Average energy consumption:37.787
-#        Average broadcasts count:267.092
-#    N=100  T=6  D=2/6  radius=6 total_time=100
-#        806 times completed in 1000 times simulation
-#        Average time used:15.617
-#        Average energy consumption:37.791
-#        Average broadcasts count:267.133
-#        
-#    
-#    N=100  T=6  D=2/6  radius=13 total_time=100      
-#        1000 times completed in 1000 times simulation
-#        Average time used:5.396
-#        Average energy consumption:18.361
-#        Average broadcasts count:76.712
-
-
-
-# Test of raduis
-    
-
-
-# Test of duty cycle  1000 次
-
-#    N=100  T=6  D=2/6  radius=6 total_time=100
-#        806 times completed in 1000 times simulation
-#        Average time used:15.617
-#        Average energy consumption:37.791
-#        Average broadcasts count:267.133
-    
-#    N=100  T=6  D=3/6  radius=6 total_time=100
-#        999 times completed in 1000 times simulation
-#        Average time used:8.998
-#        Average energy consumption:35.046
-#        Average broadcasts count:240.514
-#        
-#    N=100  T=6  D=4/6  radius=6 total_time=100
-#        1000 times completed in 1000 times simulation
-#        Average time used:6.467
-#        Average energy consumption:31.092
-#        Average broadcasts count:202.179
-    
-#    N=100  T=6  D=5/6  radius=6 total_time=100
-#        1000 times completed in 1000 times simulation
-#        Average time used:5.096
-#        Average energy consumption:32.904
-#        Average broadcasts count:219.748
-#        广播次数变多 因为节点只要在活跃周期就要广播
-    
-#    N=100  T=6  D=5/6  radius=6 total_time=100
-#        1000 times completed in 1000 times simulation
-#        Average time used:4.000
-#        Average energy consumption:31.383
-#        Average broadcasts count:205.000
-#        
