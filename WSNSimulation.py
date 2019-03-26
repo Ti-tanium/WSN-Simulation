@@ -309,7 +309,7 @@ def energy_loss(network):
     return energy_loss,broadcast_count
 
 # display the energy heatmap
-def display_energy_consume_heatmap(network,z):
+def display_energy_residual_heatmap(network,z):
     x=[]
     y=[]
     for node in network:
@@ -375,7 +375,7 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     mean_energy_remain=[0 for i in range(0,N)]
     for i in range(0,N):
         mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
-    display_energy_consume_heatmap(network,mean_energy_remain)
+    display_energy_residual_heatmap(network,mean_energy_remain)
     # variance of energy consumptions
     variance=0
     average=sum(mean_energy_remain)/len(mean_energy_remain)
