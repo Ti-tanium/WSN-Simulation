@@ -118,7 +118,7 @@ Xm=1000
 Ym=1000
 
 # fixed broadcast radius
-radius=120
+radius=100
 
 # the amount of data to be transmitted (bit)
 Data=1024*1024*1
@@ -272,7 +272,7 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radi
         
         #whether use adaptive duty cycle scheme
         if(adaptive_duty_cycle):
-            adapt_dutyCycle4(network)
+            adapt_dutyCycle1(network)
         
         #whether use adaptive braodcast radius scheme
         if(adaptive_radius):
@@ -348,8 +348,8 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     #using ABRCD scheme to adapt radius acording to the distance between node i and sink
     if(ABRCD):
         #ABRCD scheme parameters
-        q=3
-        r=100
+        q=3.5
+        r=80
         for i in range(1,N):
             distance=((network[0].x-network[i].x)**2+(network[0].y-network[i].y)**2)**(1/2)
             layer=math.ceil(math.log(1+distance*(q-1)/r,q))
@@ -375,7 +375,7 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     mean_energy_remain=[0 for i in range(0,N)]
     for i in range(0,N):
         mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
-    display_energy_consume_heatmap(network,mean_energy_remain)
+    #display_energy_consume_heatmap(network,mean_energy_remain)
     # variance of energy consumptions
     variance=0
     average=sum(mean_energy_remain)/len(mean_energy_remain)
@@ -392,7 +392,7 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     print("Net configuration:"+"N="+str(N)+" T="+str(T)+" D="+str("{:.3f}".format(D))+" r="+str(radius))
     print("Scheme:"," ABRCD" if ABRCD else ""," Adaptive Radius" if adaptive_radius else ""," Adaptive Duty Cycle" if adaptive_duty_cycle else "")
     print("Average Broadcast Delay(s):"+str(mean_time))
-    print("Average Total Energy consumption:"+mean_energy_consumption)
+    print("Average Total Energy consumption:"+str(mean_energy_consumption))
     print("Average broadcasts count:"+str(mean_broadcast))
     print("Standard Deviation of energy remain:"+str(variance**(0.5)))
             
