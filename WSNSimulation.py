@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 plt.figure(figsize=(8,8))
 
 class node(object):
-    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state')
+    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority')
     
     # effective data receive/forward speed  bps
     speed=16*1024*1024
@@ -54,6 +54,7 @@ class node(object):
         self.broadcast_count=0
         self.parent=-1  # -1 means no parent node
         self.state='ready'
+        self.priority=0
         # ready:ready to receve data or transimit data
         # receiving:current time slot is receiving data,therefore unable to broadcast
         # broadcasting:likewise
@@ -194,7 +195,7 @@ def QuickSort(net,firstIndex,lastIndex):
 def Partition(net,firstIndex,lastIndex):
     i=firstIndex-1
     for j in range(firstIndex,lastIndex):
-        if len(reachable[net[j].id])>=len(reachable[net[lastIndex].id]):
+        if net[j].priority>=net[lastIndex].priority:
             i=i+1
             net[i],net[j]=net[j],net[i]
     net[i+1],net[lastIndex]=net[lastIndex],net[i+1]
@@ -206,6 +207,15 @@ def sort_network(network):
         sorted_network.append(node)
     QuickSort(sorted_network,0,len(sorted_network)-1)
     return sorted_network
+
+## calculate priority by counting the number of unupdated code in reachable range
+def cal_prior(network):
+    for node in network:
+        n=0
+        for i in reachable[node.id]:
+            if(network[i].updated==False):
+                n+=1
+        node.priority=n
 
 def neighbor():
     neighbor_count=[]
@@ -264,6 +274,8 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radi
         time_slot=i%T
         # renew the state of the node
         renew_state(network)
+        cal_prior(network)
+
         # sort the network by the number of covered nodes
         if(density_first):
             sorted_network=sort_network(network)
@@ -279,6 +291,10 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radi
             adapt_radius(network)
         
         for node in sorted_network:
+            
+            if(node.priority==0):
+                # if every sensor node in node's coverage has been updated,then skip this node
+                continue
             if(node.id==0 and i<T):
                 # sink node broadcast |T| times to ensure nodes near sink can receive the code
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
