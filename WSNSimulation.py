@@ -347,7 +347,7 @@ def display_net(network):
         # plot node
         ax.scatter(node.x,node.y,linewidths=8,marker=('v' if node.id==0 else '.'),c=('r' if node.id==0 else 'g'))
         # plot broadcast range
-        #plt.plot(node.x+radius*np.cos(theta),node.y+radius*np.sin(theta),c=('r' if node.id==0 else 'g'))
+        plt.plot(node.x+radius*np.cos(theta),node.y+radius*np.sin(theta),c=('r' if node.id==0 else 'g'))
     fig.show()
         
     
