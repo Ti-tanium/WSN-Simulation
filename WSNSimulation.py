@@ -300,7 +300,7 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radi
                     
 
 ## calculate the total energy lost of one dissenmination
-def energy_loss(network):
+def evaluate(network):
     energy_loss=0    # mj
     broadcast_count=0
     for node in network:
