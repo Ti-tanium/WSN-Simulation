@@ -362,15 +362,13 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
         refresh_network(network)
         updated_num,time_used=start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radius)
         
-        if(updated_num==N):
-            # if the simulation completed code dissenmination(every node had been updated)
-            for node in network:
-                energy_remain[node.id].add(node.energy)
-            completed_count+=1
-            time.append(time_used)
-            energy_los,broadcast_count=energy_loss(network)
-            energy.append(energy_los)
-            broadcast.append(broadcast_count)
+        for node in network:
+            energy_remain[node.id].add(node.energy)
+        completed_count+=1
+        time.append(time_used)
+        energy_los,broadcast_count=evaluate(network)
+        energy.append(energy_los)
+        broadcast.append(broadcast_count)
     ## calculate the average energy left for each node and draw heat map
     mean_energy_remain=[0 for i in range(0,N)]
     for i in range(0,N):
