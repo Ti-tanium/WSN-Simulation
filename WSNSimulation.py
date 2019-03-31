@@ -215,7 +215,7 @@ def cal_prior(network):
         for i in reachable[node.id]:
             if(network[i].updated==False):
                 n+=1
-        node.priority=n
+        network[node.id].priority=n
 
 def neighbor():
     neighbor_count=[]
@@ -360,7 +360,7 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     broadcast=[]
     completed_count=0
     energy_remain=[set() for i in range(0,N)]
-    network=init_network(N)
+    #network=init_network(N)
     #using ABRCD scheme to adapt radius acording to the distance between node i and sink
     if(ABRCD):
         #ABRCD scheme parameters
