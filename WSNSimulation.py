@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 plt.figure(figsize=(8,8))
 
 class node(object):
-    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority')
+    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer')
     
     # effective data receive/forward speed  bps
     speed=16*1024*1024
@@ -55,6 +55,7 @@ class node(object):
         self.parent=-1  # -1 means no parent node
         self.state='ready'
         self.priority=0
+        self.layer=0
         # ready:ready to receve data or transimit data
         # receiving:current time slot is receiving data,therefore unable to broadcast
         # broadcasting:likewise
@@ -177,7 +178,6 @@ def refresh_network(network):
     for i in range(0,N):
         network[i].state="ready"
         network[i].energy=network[i].E0
-        network[i].broadcast_radius=radius
         network[i].updated=False
         network[i].broadcast_count=0
         network[i].parent=-1
@@ -369,6 +369,7 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
         for i in range(1,N):
             distance=((network[0].x-network[i].x)**2+(network[0].y-network[i].y)**2)**(1/2)
             layer=math.ceil(math.log(1+distance*(q-1)/r,q))
+            network[i].layer=layer
             network[i].broadcast_radius=r*q**(layer-1)
     #display_net(network)
     collision_domain_init(network)
