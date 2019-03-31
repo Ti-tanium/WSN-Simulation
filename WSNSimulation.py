@@ -378,10 +378,11 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
         # so it needs to be refresh for another simulation
         refresh_network(network)
         updated_num,time_used=start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radius)
-        
+
+        if(updated_num==N):
+            completed_count+=1        
         for node in network:
             energy_remain[node.id].add(node.energy)
-        completed_count+=1
         time.append(time_used)
         energy_los,broadcast_count=evaluate(network)
         energy.append(energy_los)
