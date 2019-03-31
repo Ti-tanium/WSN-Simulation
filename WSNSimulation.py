@@ -109,7 +109,7 @@ N=500
 T=6
 
 # Duty cycle of the node
-D=2/6
+D=1/6
 
 
 # total time slot
@@ -120,7 +120,7 @@ Xm=1000
 Ym=1000
 
 # fixed broadcast radius
-radius=100
+radius=80
 
 # the amount of data to be transmitted (bit)
 Data=1024*1024*1
@@ -364,7 +364,7 @@ def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=Fals
     #using ABRCD scheme to adapt radius acording to the distance between node i and sink
     if(ABRCD):
         #ABRCD scheme parameters
-        q=3.5
+        q=1.2
         r=80
         for i in range(1,N):
             distance=((network[0].x-network[i].x)**2+(network[0].y-network[i].y)**2)**(1/2)
