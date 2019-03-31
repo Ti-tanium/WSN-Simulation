@@ -276,7 +276,7 @@ def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radi
         renew_state(network)
         cal_prior(network)
 
-        # sort the network by the number of covered nodes
+        # sort the network by the number of unupdated covered nodes
         if(density_first):
             sorted_network=sort_network(network)
         else:
