@@ -113,6 +113,8 @@ T=6
 # Duty cycle of the node
 D=1/6
 
+# thresh for adding time slot
+nthresh=4
 
 # total time slot
 total_time=100
