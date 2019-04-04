@@ -186,6 +186,7 @@ def refresh_network(network):
         network[i].updated=False
         network[i].broadcast_count=0
         network[i].parent=-1
+        network[i].addedActiveSlot={}
         
 ## select a list of nodes to broadcast (Greedy approach)
 def selectBroadcastNodes(network,nthresh):
@@ -298,6 +299,7 @@ def adapt_radius(network):
     for i in range(1,N):
         Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else distance[i]/max_distance
         network[i].broadcast_radius=90+Ck*(Xm-90)
+        
 ## sink node start disseminating code
 def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
     ## total count of nodes already updated its code
@@ -341,6 +343,7 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
             if(updated_num==N):
                 print("Done dissenminating code!")
                 return updated_num,i
+            
     print("Terminated.")
     return updated_num,total_time
                     
