@@ -2,6 +2,7 @@ import random
 import numpy as np
 import pandas as pd
 import math
+import copy
 import matplotlib.pyplot as plt
 plt.figure(figsize=(8,8))
 
@@ -212,7 +213,7 @@ def selectBroadcastNodes(network,nthresh):
                         active_record[j]['set'].add(i)
         node.priority=num1
         node.priority2=num2
-        selected1.append(node.copy)
+        selected1.append(copy.copy(node))
         active[node.id]=active_record
     
     # key for sorting
@@ -237,7 +238,7 @@ def selectBroadcastNodes(network,nthresh):
                networkCopy[i].updated=True # mark as updated
             if(n>0):
                 node.priority=n
-                selected2.append(node.copy())
+                selected2.append(copy.copy(node))
         # add time slot
         for i,slot in enumerate(active[node.id]):
             if(slot['count']>nthresh):
