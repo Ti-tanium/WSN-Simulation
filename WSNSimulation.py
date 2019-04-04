@@ -386,7 +386,7 @@ def display_net(network):
     
 network=init_network(N)
 
-def run_sim(n,density_first=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False):
+def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
