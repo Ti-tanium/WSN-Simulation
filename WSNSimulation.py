@@ -304,6 +304,7 @@ def adapt_radius(network):
 def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
     ## total count of nodes already updated its code
     updated_num=0
+    network[0].updated=True
     for i in range(total_time):
         time_slot=i%T
         # renew the state of the node
