@@ -72,7 +72,7 @@ class node(object):
         network[self.id].energy-=self.transimit_energy_loss(data)
         network[self.id].broadcast_count+=1;
         for i in reachable[self.id]:
-            if(slot in network[i].active_slot and not network[i].updated and network[i].state=='ready'):
+            if(slot in network[i].active_slot|network[i].addedActiveSlot and not network[i].updated and network[i].state=='ready'):
                 ## simulating the receiving process of nodes
                 network[i].updated=True
                 network[i].state='receiving'
@@ -175,6 +175,7 @@ def collision_domain_init(network):
 def renew_state(network):
     for node in network:
         node.state="ready"
+        network[i].addedActiveSlot={}
 # refresh the network for another simulation
 def refresh_network(network):
     for i in range(0,N):
@@ -325,12 +326,12 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
             if(node.id==0 and i<T):
                 # sink node broadcast |T| times to ensure nodes near sink can receive the code
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
-            if(node.id>0 and node.updated==True and node.state=='ready' and time_slot in node.active_slot):
+            if(node.id>0 and node.updated==True and node.state=='ready' and time_slot in node.active_slot|node.addedActiveSlot):
                 # not sink node, and it has the updated code, and it is neither broadcasting nor receiving code
                 # then broadcast code to the reachable nodes near it
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
             
-            if(time_slot in node.active_slot and node.updated==False and node.state=="ready"):
+            if(time_slot in node.active_slot|node.addedActiveSlot and node.updated==False and node.state=="ready"):
                 # node is active but don't have data to broadcast neither is receiving data
                 node.idle_energy_loss()
             
