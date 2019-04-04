@@ -183,32 +183,6 @@ def refresh_network(network):
         network[i].updated=False
         network[i].broadcast_count=0
         network[i].parent=-1
-
-# sort the network according to the number of node it covers
-def QuickSort(net,firstIndex,lastIndex):
-    if firstIndex<lastIndex:
-        divIndex=Partition(net,firstIndex,lastIndex)
-        QuickSort(net,firstIndex,divIndex)       
-        QuickSort(net,divIndex+1,lastIndex)
-    else:
-        return
- 
- 
-def Partition(net,firstIndex,lastIndex):
-    i=firstIndex-1
-    for j in range(firstIndex,lastIndex):
-        if net[j].priority>=net[lastIndex].priority:
-            i=i+1
-            net[i],net[j]=net[j],net[i]
-    net[i+1],net[lastIndex]=net[lastIndex],net[i+1]
-    return i
-
-def sort_network(network):
-    sorted_network=[]
-    for node in network:
-        sorted_network.append(node)
-    QuickSort(sorted_network,0,len(sorted_network)-1)
-    return sorted_network
         
 ## select a list of nodes to broadcast (Greedy approach)
 def selectBroadcastNodes(network,nthresh):
