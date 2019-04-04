@@ -207,16 +207,69 @@ def sort_network(network):
         sorted_network.append(node)
     QuickSort(sorted_network,0,len(sorted_network)-1)
     return sorted_network
-
-## calculate priority by counting the number of unupdated code in reachable range
-def cal_prior(network):
-    for node in network:
-        n=0
+        
+## select a list of nodes to broadcast (Greedy approach)
+def selectBroadcastNodes(network,nthresh):
+    active_record=[{'count':0,'set':set()} for i in range(T)]
+    networkCopy=network.copy()
+    selected1=[] # first round selection
+    selected2=[] # second round selection
+    active={}
+    for node in networkCopy:
+        if(node.updated==False):
+            # skip unupdated nodes
+            continue
+        num1=0 # denote the number of coverd unupdated nodes
+        num2=0 # denote the number of coverd unupdated nodes that activate at the same time slot as the broadcast node
         for i in reachable[node.id]:
             if(network[i].updated==False):
-                n+=1
-        network[node.id].priority=n
+                num1+=1
+                if(len(set(node.active_slot) & set(network[i].active_slot))>0):
+                    num2+=1
+                else:
+                    for j in network[i].active_slot:
+                        active_record[j]['count']+=1
+                        active_record[j]['set'].add(i)
+        node.priority=num1
+        node.priority2=num2
+        selected1.append(node.copy)
+        active[node.id]=active_record
+    
+    # key for sorting
+    def sortBynum1(elem):
+        return elem.priority
+    def sortBynum2(elem):
+        return elem.priority2
+    
+    # sort by num1
+    selected1.sort(key=sortBynum1,reverse=True)
+    # sort by num2
+    #selected1.sort(key=sortBynum2,reverse=True)
 
+## sort by num1   
+    for node in selected1:
+        if(node.priority==0):
+            continue
+        for i in reachable[node.id]:
+            n=0
+            if(networkCopy[i].updated==False):
+               n+=1
+               networkCopy[i].updated=True # mark as updated
+            if(n>0):
+                node.priority=n
+                selected2.append(node.copy())
+        # add time slot
+        for i,slot in enumerate(active[node.id]):
+            if(slot['count']>nthresh):
+                # if count bigger than thresh, add time slot to broadcast node
+                network[node.id].addedActiveSlot.add(i)
+            else:
+                # add slot to receive node
+                for receiveNodeId in slot['set']:
+                    network[receiveNodeId].addedActiveSlot.add(i)
+    return selected2
+        
+    
 def neighbor():
     neighbor_count=[]
     for i in range(N):
