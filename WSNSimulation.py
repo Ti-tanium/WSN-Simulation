@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 plt.figure(figsize=(8,8))
 
 class node(object):
-    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer')
+    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer','priority2','addedActiveSlot')
     
     # effective data receive/forward speed  bps
     speed=16*1024*1024
@@ -55,7 +55,9 @@ class node(object):
         self.parent=-1  # -1 means no parent node
         self.state='ready'
         self.priority=0
+        self.priority2=0
         self.layer=0
+        self.addedActiveSlot={}
         # ready:ready to receve data or transimit data
         # receiving:current time slot is receiving data,therefore unable to broadcast
         # broadcasting:likewise
