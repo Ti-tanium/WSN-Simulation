@@ -322,30 +322,28 @@ def adapt_radius(network):
         Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else distance[i]/max_distance
         network[i].broadcast_radius=90+Ck*(Xm-90)
 ## sink node start disseminating code
-def start_dissenminating(network,density_first,adaptive_duty_cycle,adaptive_radius):
+def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
     ## total count of nodes already updated its code
     updated_num=0
     for i in range(total_time):
         time_slot=i%T
         # renew the state of the node
         renew_state(network)
-        cal_prior(network)
 
-        # sort the network by the number of unupdated covered nodes
-        if(density_first):
-            sorted_network=sort_network(network)
-        else:
-            sorted_network=network
+        #whether use adaptive braodcast radius scheme
+        if(adaptive_radius):
+            adapt_radius(network)
         
         #whether use adaptive duty cycle scheme
         if(adaptive_duty_cycle):
             adapt_dutyCycle1(network)
         
-        #whether use adaptive braodcast radius scheme
-        if(adaptive_radius):
-            adapt_radius(network)
-        
-        for node in sorted_network:
+        if(greedy):
+            selectedNodes=selectBroadcastNodes(network,nthresh)        
+        else:
+            selectedNodes=network.copy()
+            
+        for node in selectedNodes:
             
             if(node.priority==0):
                 # if every sensor node in node's coverage has been updated,then skip this node
