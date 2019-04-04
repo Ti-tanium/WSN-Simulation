@@ -58,7 +58,7 @@ class node(object):
         self.priority=0
         self.priority2=0
         self.layer=0
-        self.addedActiveSlot={}
+        self.addedActiveSlot=set()
         # ready:ready to receve data or transimit data
         # receiving:current time slot is receiving data,therefore unable to broadcast
         # broadcasting:likewise
@@ -152,8 +152,7 @@ def init_network(N):
         #plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
         #plt.plot(x+radius*np.cos(theta),y+radius*np.sin(theta),c=('r' if i==0 else 'g'))
-        active_slot=random.sample(range(0,T),round(T*D))
-        
+        active_slot=set(random.sample(range(0,T),round(T*D)))
         # using fixed radius
         network.append(node(x,y,radius,active_slot,i))
     # sink node
@@ -176,9 +175,9 @@ def collision_domain_init(network):
 
 # change the state of node to "ready"
 def renew_state(network):
-    for node in network:
-        node.state="ready"
-        network[i].addedActiveSlot={}
+    for i in range(0,N):
+        network[i].state="ready"
+        network[i].addedActiveSlot=set()
 # refresh the network for another simulation
 def refresh_network(network):
     for i in range(0,N):
@@ -187,7 +186,7 @@ def refresh_network(network):
         network[i].updated=False
         network[i].broadcast_count=0
         network[i].parent=-1
-        network[i].addedActiveSlot={}
+        network[i].addedActiveSlot=set()
         
 ## select a list of nodes to broadcast (Greedy approach)
 def selectBroadcastNodes(network,nthresh):
@@ -205,7 +204,7 @@ def selectBroadcastNodes(network,nthresh):
         for i in reachable[node.id]:
             if(network[i].updated==False):
                 num1+=1
-                if(len(set(node.active_slot) & set(network[i].active_slot))>0):
+                if(len(node.active_slot & network[i].active_slot)>0):
                     num2+=1
                 else:
                     for j in network[i].active_slot:
@@ -275,7 +274,7 @@ def adapt_dutyCycle1(network):
         network[i].active_slot.clear()
         # calculate adaptive duty cycle
         duty_cycle=network[i].energy/network[i].E0
-        network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
+        network[i].active_slot=set(random.sample(range(0,T),round(T*duty_cycle)))
         
 def adapt_dutyCycle4(network):
     distance=distance_cal(network)
@@ -288,7 +287,7 @@ def adapt_dutyCycle4(network):
 #         calculate adaptive duty cycle
         Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else neighbor_count[i]/max(neighbor_count)
         duty_cycle=1/T+Ck*(1-1/T)
-        network[i].active_slot=random.sample(range(0,T),round(T*duty_cycle))
+        network[i].active_slot=set(random.sample(range(0,T),round(T*duty_cycle)))
     
 
 # adaptive broadcast radius
