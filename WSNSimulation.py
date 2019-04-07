@@ -80,7 +80,6 @@ class node(object):
     # power consumption in idle state   W
     P_idle=1.15
     
-    #
     
     def __init__(self,x,y,broadcast_radius,active_slot,_id):
         self.x=x
