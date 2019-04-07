@@ -376,6 +376,13 @@ def display_energy_residual_heatmap(network,z):
             "z":z
     })
     df.plot.hexbin(x='x',y='y',C='z',gridsize=10,figsize=(10,8))
+
+def countUnupdatedNode(network):
+    n=0
+    for node in network:
+        if(node.updated==False):
+            n+=1
+    return n
     
 # display node distribution and radius
 def display_net(network):
