@@ -191,7 +191,7 @@ def refresh_network(network):
 ## select a list of nodes to broadcast (Greedy approach)
 def selectBroadcastNodes(network,nthresh):
     active_record=[{'count':0,'set':set()} for i in range(T)]
-    networkCopy=network.copy()
+    networkCopy=copyNetwork(network)
     selected1=[] # first round selection
     selected2=[] # second round selection
     active={}
@@ -248,7 +248,6 @@ def selectBroadcastNodes(network,nthresh):
                 for receiveNodeId in slot['set']:
                     network[receiveNodeId].addedActiveSlot.add(i)
     return selected2
-        
     
 def neighbor():
     neighbor_count=[]
@@ -290,6 +289,12 @@ def adapt_dutyCycle4(network):
         network[i].active_slot=set(random.sample(range(0,T),round(T*duty_cycle)))
     
 
+def copyNetwork(network):
+    netCopy=[]
+    for node in network:
+        netCopy.append(copy.copy(node))
+    return netCopy
+
 # adaptive broadcast radius
 def adapt_radius(network):
     # skip sink node (node.id=0)
@@ -303,7 +308,7 @@ def adapt_radius(network):
 ## sink node start disseminating code
 def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
     ## total count of nodes already updated its code
-    updated_num=0
+    updated_num=1
     network[0].updated=True
     for i in range(total_time):
         time_slot=i%T
@@ -321,7 +326,7 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
         if(greedy):
             selectedNodes=selectBroadcastNodes(network,nthresh)        
         else:
-            selectedNodes=network.copy()
+            selectedNodes=copyNetwork(network)
             
         for node in selectedNodes:
             
@@ -345,7 +350,7 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
                 print("Done dissenminating code!")
                 return updated_num,i
             
-    print("Terminated.")
+    print("Terminated:",updated_num)
     return updated_num,total_time
                     
 
