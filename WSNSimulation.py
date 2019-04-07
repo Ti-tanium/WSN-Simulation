@@ -487,6 +487,14 @@ def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD
 
 #20 times completed in 20 times simulation
 #Net configuration:N=500 T=6 D=0.167 r=80
+#Scheme:  ABRCD:q=1.5 r0=80    Greedy
+#Average Broadcast Delay(s):1.400
+#Average Total Energy consumption:36695.320
+#Average broadcasts count:1671.000
+#Standard Deviation of energy remain:614.3825767310414
+
+#20 times completed in 20 times simulation
+#Net configuration:N=500 T=6 D=0.167 r=80
 #Scheme:     Greedy
 #Average Broadcast Delay(s):5.000
 #Average Total Energy consumption:1238.777
