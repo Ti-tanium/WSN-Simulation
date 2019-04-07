@@ -451,4 +451,19 @@ def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD
     print("Average Total Energy consumption:"+str(mean_energy_consumption))
     print("Average broadcasts count:"+str(mean_broadcast))
     print("Standard Deviation of energy remain:"+str(variance**(0.5)))
-            
+    
+#20 times completed in 20 times simulation
+#Net configuration:N=500 T=6 D=0.167 r=80
+#Scheme:  ABRCD    Greedy
+#Average Broadcast Delay(s):1.900
+#Average Total Energy consumption:8703.832
+#Average broadcasts count:1764.000
+#Standard Deviation of energy remain:89.66071976570241
+    
+#20 times completed in 20 times simulation
+#Net configuration:N=500 T=6 D=0.167 r=80
+#Scheme:     Greedy
+#Average Broadcast Delay(s):5.000
+#Average Total Energy consumption:1238.777
+#Average broadcasts count:1676.000
+#Standard Deviation of energy remain:4.273786991032401
