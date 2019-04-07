@@ -6,6 +6,44 @@ import copy
 import matplotlib.pyplot as plt
 plt.figure(figsize=(8,8))
 
+## parameters
+
+#number of nodes in the natwork
+N=500
+
+# working period
+T=6
+
+# Duty cycle of the node
+D=1/6
+
+# thresh for adding time slot
+nthresh=4
+
+# total time slot
+total_time=100
+
+# network range
+Xm=1000
+Ym=1000
+
+# fixed broadcast radius
+radius=80
+
+# the amount of data to be transmitted (bit)
+Data=1024*1024*1
+
+## global variable
+
+# collision matrix
+collision=[set() for i in range(N)]
+
+# record reachable node of i
+reachable=[set() for i in range(N)]
+
+plt.rcParams['figure.figsize'] = (16, 16) # 设置figure_size尺寸
+
+
 class node(object):
     __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer','priority2','addedActiveSlot')
     
@@ -102,43 +140,6 @@ class node(object):
 #        self.energy-self.duration*self.idle_consumption
         self.energy-self.duration*self.P_idle
         
-
-## parameters
-
-#number of nodes in the natwork
-N=500
-
-# working period
-T=6
-
-# Duty cycle of the node
-D=1/6
-
-# thresh for adding time slot
-nthresh=4
-
-# total time slot
-total_time=100
-
-# network range
-Xm=1000
-Ym=1000
-
-# fixed broadcast radius
-radius=80
-
-# the amount of data to be transmitted (bit)
-Data=1024*1024*1
-
-## global variable
-
-# collision matrix
-collision=[set() for i in range(N)]
-
-# record reachable node of i
-reachable=[set() for i in range(N)]
-
-plt.rcParams['figure.figsize'] = (16, 16) # 设置figure_size尺寸
 
 ## init a network with fixed broadcast radius
 def init_network(N):
