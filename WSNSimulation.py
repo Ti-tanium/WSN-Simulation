@@ -199,6 +199,9 @@ def selectBroadcastNodes(network,nthresh):
         if(node.updated==False):
             # skip unupdated nodes
             continue
+        if(node.state!="ready"):
+            continue
+            
         num1=0 # denote the number of coverd unupdated nodes
         num2=0 # denote the number of coverd unupdated nodes that activate at the same time slot as the broadcast node
         for i in reachable[node.id]:
