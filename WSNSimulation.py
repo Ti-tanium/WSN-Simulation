@@ -117,7 +117,7 @@ class node(object):
                 updated_num+=1
 #                print("node "+str(network[i].id)+" start receiving")
                 network[i].energy-=self.receive_energy_loss(data)
-        network[self.id].state='ready'
+        #network[self.id].state='ready'
         return updated_num
         
     # calculating the energy loss of transimiting (data) bit code
