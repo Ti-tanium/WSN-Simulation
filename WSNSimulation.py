@@ -357,23 +357,21 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
         if(greedy):
             selectedNodes=selectBroadcastNodes(network,nthresh)        
         else:
-            selectedNodes=copyNetwork(network)
+            selectedNodes=temporaryActive(network)
 #        print("Time slot:",time_slot)
         for node in selectedNodes:
             if(node.priority==0):
-                # if every sensor node in node's coverage has been updated,then skip this node
                 continue
-            if(node.id==0 and i<T):
-                # sink node broadcast |T| times to ensure nodes near sink can receive the code
-                updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
-            if(node.id>0 and node.updated==True and node.state=='ready' and time_slot in node.active_slot|node.addedActiveSlot):
 #            if(len(node.addedActiveSlot)):
 #                print("node:",node.id,"slot:",node.addedActiveSlot)
+            if((time_slot in node.active_slot|node.addedActiveSlot) and node.state=="ready" and node.Broadcasted!="Yes" and node.updated==True):
                 # not sink node, and it has the updated code, and it is neither broadcasting nor receiving code
                 # then broadcast code to the reachable nodes near it
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
             
-            if(time_slot in node.active_slot|node.addedActiveSlot and node.updated==False and node.state=="ready"):
+        
+        for node in network:
+            if((time_slot in node.active_slot|node.addedActiveSlot) and node.state=="ready"):
                 # node is active but don't have data to broadcast neither is receiving data
                 node.idle_energy_loss()
             
