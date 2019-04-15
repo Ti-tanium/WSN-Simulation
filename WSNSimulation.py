@@ -180,9 +180,8 @@ def collision_domain_init(network):
 
 # change the state of node to "ready"
 def renew_state(network):
-    for i in range(0,N):
-        network[i].state="ready"
-        network[i].addedActiveSlot=set()
+    for node in network:
+        node.state="ready"
 # refresh the network for another simulation
 def refresh_network(network):
     for i in range(0,N):
