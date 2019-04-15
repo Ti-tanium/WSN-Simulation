@@ -311,7 +311,29 @@ def adapt_radius(network):
     for i in range(1,N):
         Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else distance[i]/max_distance
         network[i].broadcast_radius=90+Ck*(Xm-90)
+
+
+## To make sure the disseminating process goes on, when sensor nodes
+## received a packet, it broadcasts in all timeslot in one working cycle.
+## the following funciton adds active slot to nodes that is about to broadcast.
+def temporaryActive(network):
+    for node in network:    
+        if(node.updated==True and node.state=="ready" and node.Broadcasted=="no"):
+            ## active all the time to broadcast to all the surrounding node
+            ## just to make sure every node receive the packet
+            ## The added active slot will be removed when renew_slot(network)
+            ## is called upon.
+            node.addedActiveSlot=node.addedActiveSlot.union(set(range(T)))
+            node.Broadcasted="ing"
+        n=0
+        for i in reachable[node.id]:
+            if(network[i].updated==False and node.updated==True):
+                n+=1
+        node.priority=n
         
+    return network
+    
+
 ## sink node start disseminating code
 def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
     ## total count of nodes already updated its code
