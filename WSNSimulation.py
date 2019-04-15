@@ -359,6 +359,25 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
     print("Terminated:",updated_num)
     return updated_num,total_time
                     
+## check whether it is possible to complete disseminating code.
+## whethear the network is fully connected.
+def checkConnection(network):
+    copy=copyNetwork(network)
+    refresh_network(copy)
+    num=1;
+    copy[0].Broadcasted=True
+    nodes=[copy[0]]
+    while(len(nodes)!=0):
+        node=nodes.pop();
+        for i in reachable[node.id]:
+            if(copy[i].Broadcasted==False):
+                copy[i].Broadcasted=True
+                nodes.append(copy[i])
+                num+=1
+    if(num==N):
+        return True,num
+    else:
+        return False,num
 
 ## calculate the total energy lost of one dissenmination
 def evaluate(network):
