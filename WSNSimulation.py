@@ -45,7 +45,7 @@ plt.rcParams['figure.figsize'] = (16, 16) # 设置figure_size尺寸
 
 
 class node(object):
-    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer','priority2','addedActiveSlot')
+    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer','priority2','addedActiveSlot','Broadcasted')
     
     # effective data receive/forward speed  bps
     speed=16*1024*1024
@@ -96,6 +96,7 @@ class node(object):
         self.priority2=0
         self.layer=0
         self.addedActiveSlot=set()
+        self.Broadcasted="no"
         # ready:ready to receve data or transimit data
         # receiving:current time slot is receiving data,therefore unable to broadcast
         # broadcasting:likewise
@@ -186,6 +187,7 @@ def refresh_network(network):
         network[i].broadcast_count=0
         network[i].parent=-1
         network[i].addedActiveSlot=set()
+        network[i].Broadcasted="no"
         
 ## select a list of nodes to broadcast (Greedy approach)
 def selectBroadcastNodes(network,nthresh):
