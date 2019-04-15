@@ -366,7 +366,8 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
             selectedNodes=selectBroadcastNodes(network,nthresh,time_slot)  
         else:
             selectedNodes=temporaryActive(network)
-#        print("Time slot:",time_slot)
+            
+        print("Time slot:",time_slot,"len:",len(selectedNodes))
         for node in selectedNodes:
             if(node.priority==0):
                 continue
