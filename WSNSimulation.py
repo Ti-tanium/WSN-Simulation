@@ -367,13 +367,13 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
             if((time_slot in network[node.id].active_slot|network[node.id].addedActiveSlot) and network[node.id].state=="ready" and network[node.id].Broadcasted!="Yes" and network[node.id].updated==True):
                 # not sink node, and it has the updated code, and it is neither broadcasting nor receiving code
                 # then broadcast code to the reachable nodes near it
-                updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
+                updated_num=network[node.id].broadcast(collision,Data,network,time_slot,updated_num)
             
         
         for node in network:
-            if((time_slot in node.active_slot|node.addedActiveSlot) and node.state=="ready"):
+            if((time_slot in network[node.id].active_slot|network[node.id].addedActiveSlot) and network[node.id].state=="ready"):
                 # node is active but don't have data to broadcast neither is receiving data
-                node.idle_energy_loss()
+                network[node.id].idle_energy_loss()
             
             ## whether all the nodes in the network had updated their code
             if(updated_num==N):
