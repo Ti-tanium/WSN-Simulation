@@ -238,14 +238,14 @@ def selectBroadcastNodes(network,nthresh):
     for node in selected1:
         if(node.priority==0):
             continue
+        n=0
         for i in reachable[node.id]:
-            n=0
             if(networkCopy[i].updated==False):
                n+=1
                networkCopy[i].updated=True # mark as updated
-            if(n>0):
-                node.priority=n
-                selected2.append(copy.copy(node))
+               
+        node.priority=n
+        selected2.append(copy.copy(node))
         # add time slot
         for i,slot in enumerate(active[node.id]):
             if(i in node.active_slot):
