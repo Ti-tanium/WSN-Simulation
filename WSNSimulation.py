@@ -110,6 +110,10 @@ class node(object):
 #        print("node "+str(self.id)+" start broadcasting")
         network[self.id].energy-=self.transimit_energy_loss(data)
         network[self.id].broadcast_count+=1;
+        if(slot in network[self.id].addedActiveSlot):
+            network[self.id].addedActiveSlot.remove(slot)
+            if(len(network[self.id].addedActiveSlot)==0):
+                network[self.id].Broadcasted="Yes"
         for i in reachable[self.id]:
             if(slot in network[i].active_slot|network[i].addedActiveSlot and not network[i].updated and network[i].state=='ready'):
                 ## simulating the receiving process of nodes
