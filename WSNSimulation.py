@@ -104,9 +104,10 @@ class node(object):
     def broadcast(self,collision,data,network,slot,updated_num):
         for i in collision[self.id]:
             if(network[i].state=='broadcasting'):
+#                print("collision:node "+str(self.id)+" + node "+str(network[i].id))
                 return updated_num
         network[self.id].state='broadcasting'
-        #print("node "+str(self.id)+" start broadcasting")
+#        print("node "+str(self.id)+" start broadcasting")
         network[self.id].energy-=self.transimit_energy_loss(data)
         network[self.id].broadcast_count+=1;
         for i in reachable[self.id]:
@@ -334,6 +335,7 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
         else:
             selectedNodes=copyNetwork(network)
             
+#        print("Time slot:",time_slot)
         for node in selectedNodes:
             
             if(node.priority==0):
@@ -343,6 +345,8 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
                 # sink node broadcast |T| times to ensure nodes near sink can receive the code
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
             if(node.id>0 and node.updated==True and node.state=='ready' and time_slot in node.active_slot|node.addedActiveSlot):
+#            if(len(node.addedActiveSlot)):
+#                print("node:",node.id,"slot:",node.addedActiveSlot)
                 # not sink node, and it has the updated code, and it is neither broadcasting nor receiving code
                 # then broadcast code to the reachable nodes near it
                 updated_num=node.broadcast(collision,Data,network,time_slot,updated_num)
