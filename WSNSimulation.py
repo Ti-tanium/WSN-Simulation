@@ -120,7 +120,9 @@ class node(object):
                 network[i].updated=True
                 network[i].state='receiving'
                 updated_num+=1
-#                print("node "+str(network[i].id)+" start receiving")
+                # remove receive slot
+                network[i].addedActiveSlot.remove(slot)
+                print("node "+str(network[i].id)+" start receiving")
                 network[i].energy-=self.receive_energy_loss(data)
         #network[self.id].state='ready'
         return updated_num
