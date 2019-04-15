@@ -157,7 +157,7 @@ def init_network(N):
         #plt.scatter(x,y,marker=('v' if i==0 else '.'),c=('r' if i==0 else 'g'))
         # plot broadcast range
         #plt.plot(x+radius*np.cos(theta),y+radius*np.sin(theta),c=('r' if i==0 else 'g'))
-        active_slot=set(random.sample(range(0,T),round(T*D)))
+        active_slot=set(random.sample(range(T),round(T*D)))
         # using fixed radius
         network.append(node(x,y,radius,active_slot,i))
     # sink node
@@ -346,7 +346,6 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
         time_slot=i%T
         # renew the state of the node
         renew_state(network)
-
         #whether use adaptive braodcast radius scheme
         if(adaptive_radius):
             adapt_radius(network)
@@ -359,10 +358,8 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
             selectedNodes=selectBroadcastNodes(network,nthresh)        
         else:
             selectedNodes=copyNetwork(network)
-            
 #        print("Time slot:",time_slot)
         for node in selectedNodes:
-            
             if(node.priority==0):
                 # if every sensor node in node's coverage has been updated,then skip this node
                 continue
@@ -384,6 +381,7 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
             if(updated_num==N):
                 print("Done dissenminating code!")
                 return updated_num,i
+        
             
     print("Terminated:",updated_num)
     return updated_num,i
@@ -464,7 +462,7 @@ def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD
     #using ABRCD scheme to adapt radius acording to the distance between node i and sink
     if(ABRCD):
         #ABRCD scheme parameters
-        q=1.2
+        q=1.5
         r=80
         for i in range(1,N):
             distance=((network[0].x-network[i].x)**2+(network[0].y-network[i].y)**2)**(1/2)
