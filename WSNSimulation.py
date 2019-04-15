@@ -196,12 +196,10 @@ def refresh_network(network):
         network[i].Broadcasted="no"
         
 ## select a list of nodes to broadcast (Greedy approach)
-def selectBroadcastNodes(network,nthresh):
-    active_record=[{'count':0,'set':set()} for i in range(T)]
+def selectBroadcastNodes(network,nthresh,time_slot):    
     networkCopy=copyNetwork(network)
     selected1=[] # first round selection
     selected2=[] # second round selection
-    active={}
     for node in networkCopy:
         if(node.updated==False):
             # skip unupdated nodes
@@ -216,14 +214,10 @@ def selectBroadcastNodes(network,nthresh):
                 num1+=1
                 if(len(node.active_slot & network[i].active_slot)>0):
                     num2+=1
-                else:
-                    for j in network[i].active_slot:
-                        active_record[j]['count']+=1
-                        active_record[j]['set'].add(i)
+
         node.priority=num1
         node.priority2=num2
         selected1.append(copy.copy(node))
-        active[node.id]=active_record
     
     # key for sorting
     def sortBynum1(elem):
@@ -236,6 +230,8 @@ def selectBroadcastNodes(network,nthresh):
     # sort by num2
     #selected1.sort(key=sortBynum2,reverse=True)
 
+    active={}
+    active_record=[{'count':0,'set':set()} for i in range(T)]
 ## sort by num1   
     for node in selected1:
         if(node.priority==0):
@@ -244,13 +240,18 @@ def selectBroadcastNodes(network,nthresh):
         for i in reachable[node.id]:
             if(networkCopy[i].updated==False):
                n+=1
+               if(len(node.active_slot & network[i].active_slot)==0):
+                    for j in networkCopy[i].active_slot:
+                        active_record[j]['count']+=1
+                        active_record[j]['set'].add(i)
                networkCopy[i].updated=True # mark as updated
                
+        active[node.id]=active_record
         node.priority=n
         selected2.append(copy.copy(node))
         # add time slot
         for i,slot in enumerate(active[node.id]):
-            if(i in node.active_slot):
+            if(i in node.active_slot or slot['count']==0):
                 continue;
             if(slot['count']>nthresh):
                 # if count bigger than thresh, add time slot to broadcast node
@@ -258,7 +259,12 @@ def selectBroadcastNodes(network,nthresh):
             else:
                 # add slot to receive node
                 for receiveNodeId in slot['set']:
-                    network[receiveNodeId].addedActiveSlot.add(i)
+                    ## add the nearest active slot to the current slot
+                    addedslot=min(node.active_slot)
+                    for j in node.active_slot:
+                        if(j>=time_slot):
+                            addedslot=j
+                    network[receiveNodeId].addedActiveSlot.add(j)   
     return selected2
     
 def neighbor():
@@ -357,7 +363,7 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
             adapt_dutyCycle1(network)
         
         if(greedy):
-            selectedNodes=selectBroadcastNodes(network,nthresh)        
+            selectedNodes=selectBroadcastNodes(network,nthresh,time_slot)  
         else:
             selectedNodes=temporaryActive(network)
 #        print("Time slot:",time_slot)
