@@ -21,7 +21,7 @@ D=1/6
 nthresh=4
 
 # total time slot
-total_time=100
+total_time=200
 
 # network range
 Xm=1000
