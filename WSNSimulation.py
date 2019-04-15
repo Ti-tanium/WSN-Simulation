@@ -357,7 +357,7 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
                 return updated_num,i
             
     print("Terminated:",updated_num)
-    return updated_num,total_time
+    return updated_num,i
                     
 ## check whether it is possible to complete disseminating code.
 ## whethear the network is fully connected.
