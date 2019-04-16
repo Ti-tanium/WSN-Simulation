@@ -328,6 +328,7 @@ def adapt_radius(network):
 ## received a packet, it broadcasts in all timeslot in one working cycle.
 ## the following funciton adds active slot to nodes that is about to broadcast.
 def temporaryActive(network):
+    selectedNodes=[]
     for node in network:    
         if(node.updated==True and node.state=="ready" and node.Broadcasted=="no"):
             ## active all the time to broadcast to all the surrounding node
@@ -335,13 +336,16 @@ def temporaryActive(network):
             ## The added active slot will be removed when renew_slot(network)
             ## is called upon.
             node.addedActiveSlot=node.addedActiveSlot.union(set(range(T)))
-            node.Broadcasted="ing"
+            node.Broadcasted="ing" 
         n=0
         for i in reachable[node.id]:
             if(network[i].updated==False and node.updated==True):
                 n+=1
         node.priority=n
-        
+        if(node.priority==0):
+            continue
+        selectedNodes.append(node);
+    return selectedNodes
 
 def indexOfMax(adic):
     alist=[]
