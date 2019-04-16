@@ -121,8 +121,9 @@ class node(object):
                 network[i].state='receiving'
                 updated_num+=1
                 # remove receive slot
-                network[i].addedActiveSlot.remove(slot)
-                print("node "+str(network[i].id)+" start receiving")
+                if(slot in network[i].addedActiveSlot):
+                    network[i].addedActiveSlot.remove(slot)
+#                print("node "+str(network[i].id)+" start receiving")
                 network[i].energy-=self.receive_energy_loss(data)
         #network[self.id].state='ready'
         return updated_num
@@ -377,6 +378,7 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,L):
     ## total count of nodes already updated its code
     updated_num=1
     network[0].updated=True
+#    network[0].active_slot=set(range(T))
     for i in range(total_time):
         time_slot=i%T
         # renew the state of the node
@@ -396,12 +398,10 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,L):
         else:
             selectedNodes=temporaryActive(network)
             
-        print("Time slot:",time_slot,"len:",len(selectedNodes))
+#        print("Time slot:",time_slot,"len:",len(selectedNodes))
         for node in selectedNodes:
-            if(node.priority==0):
-                continue
-            if(len(node.addedActiveSlot)):
-                print("node:",node.id,"slot:",node.addedActiveSlot)
+#            if(len(node.addedActiveSlot)):
+#                print("node:",node.id,"slot:",node.addedActiveSlot)
             if((time_slot in network[node.id].active_slot|network[node.id].addedActiveSlot) and network[node.id].state=="ready" and network[node.id].Broadcasted!="Yes" and network[node.id].updated==True):
                 # not sink node, and it has the updated code, and it is neither broadcasting nor receiving code
                 # then broadcast code to the reachable nodes near it
@@ -525,7 +525,7 @@ def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD
     mean_energy_remain=[0 for i in range(0,N)]
     for i in range(0,N):
         mean_energy_remain[i]=sum(energy_remain[i])/len(energy_remain[i]) if len(energy_remain[i]) !=0 else 0
-    display_energy_residual_heatmap(network,mean_energy_remain)
+#    display_energy_residual_heatmap(network,mean_energy_remain)
     # variance of energy consumptions
     variance=0
     average=sum(mean_energy_remain)/len(mean_energy_remain)
