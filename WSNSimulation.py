@@ -369,7 +369,7 @@ def LActivate(network):
     
 
 ## sink node start disseminating code
-def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
+def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,L):
     ## total count of nodes already updated its code
     updated_num=1
     network[0].updated=True
@@ -387,6 +387,8 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius):
         
         if(greedy):
             selectedNodes=selectBroadcastNodes(network,nthresh,time_slot)  
+        elif(L):
+            selectedNodes=LActivate(network)
         else:
             selectedNodes=temporaryActive(network)
             
