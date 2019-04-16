@@ -342,7 +342,30 @@ def temporaryActive(network):
                 n+=1
         node.priority=n
         
+
+def indexOfMax(adic):
+    alist=[]
+    for i in adic:
+        alist.append(i['count'])
+    m=max(alist)
+    for i,slot in enumerate(alist):
+            if slot==m:
+                return i
+
+def LActivate(network):
+    for node in network:
+        active=[{'count':0,'set':set()} for i in range(T)]
+        for i in reachable[node.id]:
+            for j in network[i].active_slot:
+                active[j]['count']+=1
+                active[j]['set'].add(i)
+        addedSlot=indexOfMax(active)
+        for i in active[addedSlot]['set']:
+            network[i].addedActiveSlot.add(addedSlot)
     return network
+        
+        
+                
     
 
 ## sink node start disseminating code
@@ -458,7 +481,7 @@ def display_net(network):
     
 network=init_network(N)
 
-def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False):
+def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False,L=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
@@ -482,7 +505,7 @@ def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD
         # after a simulation, the network is changed
         # so it needs to be refresh for another simulation
         refresh_network(network)
-        updated_num,time_used=start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius)
+        updated_num,time_used=start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,L)
 
         if(updated_num==N):
             completed_count+=1        
