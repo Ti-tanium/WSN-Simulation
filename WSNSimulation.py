@@ -265,7 +265,7 @@ def selectBroadcastNodes(network,nthresh,time_slot):
                     for j in node.active_slot:
                         if(j>=time_slot):
                             addedslot=j
-                    network[receiveNodeId].addedActiveSlot.add(j)   
+                    network[receiveNodeId].addedActiveSlot.add(addedslot)   
     return selected2
     
 def neighbor():
