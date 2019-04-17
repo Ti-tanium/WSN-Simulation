@@ -254,7 +254,7 @@ def selectBroadcastNodes(network,nthresh,time_slot):
         for i,slot in enumerate(active[node.id]):
             if(i in node.active_slot or slot['count']==0):
                 continue;
-            if(slot['count']>nthresh):
+            if(slot['count']>=nthresh):
                 # if count bigger than thresh, add time slot to broadcast node
                 network[node.id].addedActiveSlot.add(i)
             else:
