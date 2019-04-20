@@ -342,13 +342,6 @@ def ACASelect(network,nthresh,time_slot):
                     network[receiveNodeId].addedActiveSlot.add(addedslot)   
     return selected2
 
-           
-       
-def neighbor():
-    neighbor_count=[]
-    for i in range(N):
-        neighbor_count.append(len(reachable[i]))
-    return neighbor_count
 
 def distance_cal(network):
     distance=[0 for i in range(N)]
@@ -356,49 +349,13 @@ def distance_cal(network):
         Dsi=((network[i].x-network[0].x)**2+(network[i].y-network[0].y)**2)**0.5
         distance[network[i].id]=Dsi
     return distance
-
-# adaptive duty cycle
-def adapt_dutyCycle1(network):
-    # mean_neighbor,max_neighbor=neighbor()
-    distance=distance_cal(network)
-    mean_distance=sum(distance)/N
-    max_distance=max(distance)
-    for i in range(0,N):
-        # clear duty cycle
-        network[i].active_slot.clear()
-        # calculate adaptive duty cycle
-        duty_cycle=network[i].energy/network[i].E0
-        network[i].active_slot=set(random.sample(range(0,T),round(T*duty_cycle)))
-        
-def adapt_dutyCycle4(network):
-    distance=distance_cal(network)
-    mean_distance=sum(distance)/N
-    max_distance=max(distance)
-    neighbor_count=neighbor();
-    for i in range(0,N):
-        # clear duty cycle
-        network[i].active_slot.clear()
-#         calculate adaptive duty cycle
-        Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else neighbor_count[i]/max(neighbor_count)
-        duty_cycle=1/T+Ck*(1-1/T)
-        network[i].active_slot=set(random.sample(range(0,T),round(T*duty_cycle)))
-    
+  
 
 def copyNetwork(network):
     netCopy=[]
     for node in network:
         netCopy.append(copy.copy(node))
     return netCopy
-
-# adaptive broadcast radius
-def adapt_radius(network):
-    # skip sink node (node.id=0)
-    distance=distance_cal(network)
-    mean_distance=sum(distance)/N
-    max_distance=max(distance)
-    for i in range(1,N):
-        Ck=network[i].energy/network[i].E0 if distance[i]>=mean_distance else distance[i]/max_distance
-        network[i].broadcast_radius=90+Ck*(Xm-90)
 
 
 ## To make sure the disseminating process goes on, when sensor nodes
