@@ -374,7 +374,7 @@ def LActivate(network):
     
 
 ## sink node start disseminating code
-def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,L):
+def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC):
     ## total count of nodes already updated its code
     updated_num=1
     network[0].updated=True
@@ -393,8 +393,8 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,L):
         
         if(greedy):
             selectedNodes=selectBroadcastNodes(network,nthresh,time_slot)  
-        elif(L):
-            selectedNodes=LActivate(network)
+        elif(AC):
+            selectedNodes=ACASelect(network,nthresh,time_slot)
         else:
             selectedNodes=temporaryActive(network)
             
@@ -487,7 +487,7 @@ def display_net(network):
     
 network=init_network(N)
 
-def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False,L=False):
+def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD=False,AC=False):
     # simulate n time and get the mean energy comsumption and broadcasts count
     time=[]
     energy=[]
@@ -546,6 +546,7 @@ def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD
     print("Average broadcasts count:"+str(mean_broadcast))
     print("Standard Deviation of energy remain:"+str(variance**(0.5)))
 
+run_sim(1,AC=True)
 #q=1.2
 #20 times completed in 20 times simulation
 #Net configuration:N=500 T=6 D=0.167 r=80
