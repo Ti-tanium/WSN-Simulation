@@ -69,7 +69,8 @@ class node(object):
     #initial energy  mJ
     E0=10**(3)
     
-    
+ 
+
     ## First Order Radio Model
     # energy disspation of radio  j/bit
     E_elec=50*10**(-9)
@@ -295,9 +296,8 @@ def ACASelect(network,nthresh,time_slot):
                 if(distance<node.broadcast_radius and area[x][y]==0):
                     area[x][y]=1
                     additionalCoverageArea+=1
-        if(additionalCoverageArea>0):
-            node.ACA=additionalCoverageArea
-            selected1.append(copy.copy(node))
+        node.ACA=additionalCoverageArea
+        selected1.append(copy.copy(node))
             
     def sortByAC(elem):
         return elem.additionalCoverageArea
@@ -307,22 +307,13 @@ def ACASelect(network,nthresh,time_slot):
     active_record=[{'count':0,'set':set()} for i in range(T)]
 ## sort by num1   
     for node in selected1:
-        if(node.priority==0):
-            continue
-        n=0
         for i in reachable[node.id]:
             if(networkCopy[i].updated==False):
-               n+=1
                if(len(node.active_slot & network[i].active_slot)==0):
                     for j in networkCopy[i].active_slot:
                         active_record[j]['count']+=1
                         active_record[j]['set'].add(i)
-               networkCopy[i].updated=True # mark as updated
-               
         active[node.id]=active_record
-        node.priority=n
-#        if(node.priority==0):
-#            continue;
         selected2.append(copy.copy(node))
         # add time slot
         for i,slot in enumerate(active[node.id]):
@@ -382,30 +373,6 @@ def temporaryActive(network):
     return selectedNodes
 
 def indexOfMax(adic):
-    alist=[]
-    for i in adic:
-        alist.append(i['count'])
-    m=max(alist)
-    for i,slot in enumerate(alist):
-            if slot==m:
-                return i
-
-def LActivate(network):
-    for node in network:
-        active=[{'count':0,'set':set()} for i in range(T)]
-        for i in reachable[node.id]:
-            for j in network[i].active_slot:
-                active[j]['count']+=1
-                active[j]['set'].add(i)
-        addedSlot=indexOfMax(active)
-        for i in active[addedSlot]['set']:
-            network[i].addedActiveSlot.add(addedSlot)
-    return network
-        
-        
-                
-    
-
 ## sink node start disseminating code
 def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC):
     ## total count of nodes already updated its code
