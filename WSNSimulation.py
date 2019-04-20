@@ -45,7 +45,7 @@ plt.rcParams['figure.figsize'] = (16, 16) # 设置figure_size尺寸
 
 
 class node(object):
-    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer','priority2','addedActiveSlot','Broadcasted')
+    __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer','priority2','addedActiveSlot','Broadcasted','additionalCoverageArea')
     
     # effective data receive/forward speed  bps
     speed=16*1024*1024
@@ -97,6 +97,7 @@ class node(object):
         self.layer=0
         self.addedActiveSlot=set()
         self.Broadcasted="no"
+        self.additionalCoverageArea=0
         # ready:ready to receve data or transimit data
         # receiving:current time slot is receiving data,therefore unable to broadcast
         # broadcasting:likewise
@@ -195,6 +196,7 @@ def refresh_network(network):
         network[i].parent=-1
         network[i].addedActiveSlot=set()
         network[i].Broadcasted="no"
+        network[i].additionalCoverageArea=0
         
 ## select a list of nodes to broadcast (Greedy approach)
 def selectBroadcastNodes(network,nthresh,time_slot):    
@@ -268,6 +270,80 @@ def selectBroadcastNodes(network,nthresh,time_slot):
                     network[receiveNodeId].addedActiveSlot.add(addedslot)   
     return selected2
     
+## Select broadcast node by additional coverage area
+def ACASelect(network,nthresh,time_slot):    
+    networkCopy=copyNetwork(network)
+    selected1=[] # first round selection
+    selected2=[] # second round selection
+    for node in networkCopy:
+        if(node.updated==False):
+            # skip unupdated nodes
+            continue
+        if(node.state!="ready"):
+            continue
+            
+        additionalCoverageArea=0
+        XM=math.ceil((node.x+node.broadcast_radius)*1)
+        Xm=math.ceil((node.x-node.broadcast_radius)*1)
+        YM=math.ceil((node.y+node.broadcast_radius)*1)
+        Ym=math.ceil((node.y-node.broadcast_radius)*1)
+        for x in range(Xm,XM+1):
+            for y in range(Ym,YM+1):
+                if(x<=0 or y<=0 or x>=1000 or y>=1000):
+                    continue
+                distance=((node.x-x/1)**2+(node.y-y/1)**2)**(1/2)
+                if(distance<node.broadcast_radius and area[x][y]==0):
+                    area[x][y]=1
+                    additionalCoverageArea+=1
+        if(additionalCoverageArea>0):
+            node.ACA=additionalCoverageArea
+            selected1.append(copy.copy(node))
+            
+    def sortByAC(elem):
+        return elem.additionalCoverageArea
+    selected1.sort(key=sortByAC,reverse=True)
+
+    active={}
+    active_record=[{'count':0,'set':set()} for i in range(T)]
+## sort by num1   
+    for node in selected1:
+        if(node.priority==0):
+            continue
+        n=0
+        for i in reachable[node.id]:
+            if(networkCopy[i].updated==False):
+               n+=1
+               if(len(node.active_slot & network[i].active_slot)==0):
+                    for j in networkCopy[i].active_slot:
+                        active_record[j]['count']+=1
+                        active_record[j]['set'].add(i)
+               networkCopy[i].updated=True # mark as updated
+               
+        active[node.id]=active_record
+        node.priority=n
+#        if(node.priority==0):
+#            continue;
+        selected2.append(copy.copy(node))
+        # add time slot
+        for i,slot in enumerate(active[node.id]):
+            if(i in node.active_slot or slot['count']==0):
+                continue;
+            if(slot['count']>=nthresh):
+                # if count bigger than thresh, add time slot to broadcast node
+                network[node.id].addedActiveSlot.add(i)
+            else:
+                # add slot to receive node
+                for receiveNodeId in slot['set']:
+                    ## add the nearest active slot to the current slot
+                    addedslot=min(node.active_slot)
+                    for j in node.active_slot:
+                        if(j>=time_slot):
+                            addedslot=j
+                    network[receiveNodeId].addedActiveSlot.add(addedslot)   
+    return selected2
+
+           
+       
 def neighbor():
     neighbor_count=[]
     for i in range(N):
