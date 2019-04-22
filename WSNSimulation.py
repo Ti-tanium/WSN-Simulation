@@ -409,10 +409,10 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC):
                 # node is active but don't have data to broadcast neither is receiving data
                 network[node.id].idle_energy_loss()
             
-            ## whether all the nodes in the network had updated their code
-            if(updated_num==N):
-                print("Done dissenminating code!")
-                return updated_num,i
+        ## whether all the nodes in the network had updated their code
+        if(updated_num==N):
+            print("Done dissenminating code!")
+            return updated_num,i
         
             
     print("Terminated:",updated_num)
