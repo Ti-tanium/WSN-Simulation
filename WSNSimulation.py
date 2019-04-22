@@ -353,8 +353,8 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC):
     ## total count of nodes already updated its code
     updated_num=1
     network[0].updated=True
-#    network[0].active_slot=set(range(T))
     for i in range(total_time):
+    network[0].addedActiveSlot=set(range(T))
         time_slot=i%T
         # renew the state of the node
         renew_state(network)
