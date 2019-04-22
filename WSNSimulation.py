@@ -43,7 +43,6 @@ reachable=[set() for i in range(N)]
 
 plt.rcParams['figure.figsize'] = (16, 16) # 设置figure_size尺寸
 
-
 class node(object):
     __slot__=('x','y','energy','broadcast_radius','active_slot','parent','id','updated','broadcast_count','state','priority','layer','priority2','addedActiveSlot','Broadcasted','additionalCoverageArea')
     
