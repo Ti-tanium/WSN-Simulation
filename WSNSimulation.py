@@ -336,7 +336,7 @@ def temporaryActive(network):
             ## just to make sure every node receive the packet
             ## The added active slot will be removed when renew_slot(network)
             ## is called upon.
-            node.addedActiveSlot=node.addedActiveSlot.union(set(range(T)))
+            network[node.id].addedActiveSlot=node.addedActiveSlot.union(set(range(T)))
             node.Broadcasted="ing" 
         n=0
         for i in reachable[node.id]:
