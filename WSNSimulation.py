@@ -276,15 +276,12 @@ def selectBroadcastNodes(network,nthresh,time_slot):
 
 area=[[0 for i in range(1000)] for i in range(1000)]
 ## Select broadcast node by additional coverage area
-def ACASelect(network,nthresh,time_slot):    
-    networkCopy=copyNetwork(network)
-    networkCopy=temporaryActive(networkCopy)
-    selected1=[] # first round selection
+def ACASelect(network,nthresh,time_slot):
+    networkCopy=temporaryActive(network)
+    selected1=[] # first rnetwoound selection
     for node in networkCopy:
-        if(node.updated==False):
-            # skip unupdated nodes
-            continue
-        if(node.state!="ready"):
+        if(node.Broadcasted=="ing" and node.additionalCoverageArea>0):
+            selected1.append(copy.copy(node))
             continue
         additionalCoverageArea=0
         XM=math.ceil((node.x+node.broadcast_radius)*1)
@@ -300,10 +297,10 @@ def ACASelect(network,nthresh,time_slot):
                 distance=((node.x-x/1)**2+(node.y-y/1)**2)**(1/2)
                 if(distance<node.broadcast_radius and area[x][y]==0):
                     area[x][y]=1
-                    additionalCoverageArea+=1
-        node.ACA=additionalCoverageArea
-        selected1.append(copy.copy(node))
-            
+                    additionalCoverageArea+=1        
+        if(additionalCoverageArea>0):
+            node.additionalCoverageArea=additionalCoverageArea
+            selected1.append(copy.copy(node))
     def sortByAC(elem):
         return elem.additionalCoverageArea
     selected1.sort(key=sortByAC,reverse=True)
