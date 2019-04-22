@@ -482,7 +482,7 @@ def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD
         # after a simulation, the network is changed
         # so it needs to be refresh for another simulation
         refresh_network(network)
-        updated_num,time_used=start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,L)
+        updated_num,time_used=start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC)
 
         if(updated_num==N):
             completed_count+=1        
