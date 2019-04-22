@@ -189,6 +189,8 @@ def renew_state(network):
         node.state="ready"
 # refresh the network for another simulation
 def refresh_network(network):
+    global area
+    area=[[0 for i in range(1000)] for i in range(1000)]
     for i in range(0,N):
         network[i].state="ready"
         network[i].energy=network[i].E0
