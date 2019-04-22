@@ -66,7 +66,7 @@ class node(object):
     # the duration of time slot  s
     duration=0.1
     
-    #initial energy  mJ
+    #initial energy  J
     E0=10**(3)
     
  
@@ -199,6 +199,7 @@ def refresh_network(network):
         network[i].Broadcasted="no"
         network[i].additionalCoverageArea=0
         
+        
 ## select a list of nodes to broadcast (Greedy approach)
 def selectBroadcastNodes(network,nthresh,time_slot):    
     networkCopy=copyNetwork(network)
@@ -252,6 +253,8 @@ def selectBroadcastNodes(network,nthresh,time_slot):
                
         active[node.id]=active_record
         node.priority=n
+#        if(node.priority==0):
+#            continue;
         selected2.append(copy.copy(node))
         # add time slot
         for i,slot in enumerate(active[node.id]):
@@ -304,10 +307,7 @@ def ACASelect(network,nthresh,time_slot):
     def sortByAC(elem):
         return elem.additionalCoverageArea
     selected1.sort(key=sortByAC,reverse=True)
-
     return selected1
-
-    
 
 
 def distance_cal(network):
@@ -368,8 +368,8 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC):
             
 #        print("Time slot:",time_slot,"len:",len(selectedNodes))
         for node in selectedNodes:
-            if(len(node.addedActiveSlot)):
-                print("node:",node.id,"slot:",node.addedActiveSlot)
+#            if(len(node.addedActiveSlot)):
+#                print("node:",node.id,"slot:",node.addedActiveSlot)
             if(node.state=="ready" and (time_slot in network[node.id].active_slot|network[node.id].addedActiveSlot) and network[node.id].state=="ready" and network[node.id].Broadcasted!="Yes" and network[node.id].updated==True):
                 # not sink node, and it has the updated code, and it is neither broadcasting nor receiving code
                 # then broadcast code to the reachable nodes near it
@@ -513,8 +513,6 @@ def run_sim(n,greedy=False,adaptive_duty_cycle=False,adaptive_radius=False,ABRCD
     print("Average Total Energy consumption:"+str(mean_energy_consumption))
     print("Average broadcasts count:"+str(mean_broadcast))
     print("Standard Deviation of energy remain:"+str(variance**(0.5)))
-
-run_sim(1,AC=True)
 #q=1.2
 #20 times completed in 20 times simulation
 #Net configuration:N=500 T=6 D=0.167 r=80
