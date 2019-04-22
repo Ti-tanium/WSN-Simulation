@@ -305,35 +305,9 @@ def ACASelect(network,nthresh,time_slot):
         return elem.additionalCoverageArea
     selected1.sort(key=sortByAC,reverse=True)
 
-    active={}
-    active_record=[{'count':0,'set':set()} for i in range(T)]
-## sort by num1   
-    for node in selected1:
-        for i in reachable[node.id]:
-            if(networkCopy[i].updated==False):
-               if(len(node.active_slot & network[i].active_slot)==0):
-                    for j in networkCopy[i].active_slot:
-                        active_record[j]['count']+=1
-                        active_record[j]['set'].add(i)
-        active[node.id]=active_record
-        selected2.append(copy.copy(node))
-        # add time slot
-        for i,slot in enumerate(active[node.id]):
-            if(i in node.active_slot or slot['count']==0):
-                continue;
-            if(slot['count']>=nthresh):
-                # if count bigger than thresh, add time slot to broadcast node
-                network[node.id].addedActiveSlot.add(i)
-            else:
-                # add slot to receive node
-                for receiveNodeId in slot['set']:
-                    ## add the nearest active slot to the current slot
-                    addedslot=min(node.active_slot)
-                    for j in node.active_slot:
-                        if(j>=time_slot):
-                            addedslot=j
-                    network[receiveNodeId].addedActiveSlot.add(addedslot)   
-    return selected2
+    return selected1
+
+    
 
 
 def distance_cal(network):
