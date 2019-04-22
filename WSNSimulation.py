@@ -275,6 +275,7 @@ area=[[0 for i in range(1000)] for i in range(1000)]
 ## Select broadcast node by additional coverage area
 def ACASelect(network,nthresh,time_slot):    
     networkCopy=copyNetwork(network)
+    networkCopy=temporaryActive(networkCopy)
     selected1=[] # first round selection
     selected2=[] # second round selection
     for node in networkCopy:
