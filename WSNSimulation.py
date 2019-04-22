@@ -387,10 +387,6 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC):
         if(adaptive_radius):
             adapt_radius(network)
         
-        #whether use adaptive duty cycle scheme
-        if(adaptive_duty_cycle):
-            adapt_dutyCycle1(network)
-        
         if(greedy):
             selectedNodes=selectBroadcastNodes(network,nthresh,time_slot)  
         elif(AC):
