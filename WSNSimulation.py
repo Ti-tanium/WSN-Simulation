@@ -358,9 +358,6 @@ def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC):
         time_slot=i%T
         # renew the state of the node
         renew_state(network)
-        #whether use adaptive braodcast radius scheme
-        if(adaptive_radius):
-            adapt_radius(network)
         
         if(greedy):
             selectedNodes=selectBroadcastNodes(network,nthresh,time_slot)  
