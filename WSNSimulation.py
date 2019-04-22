@@ -270,7 +270,8 @@ def selectBroadcastNodes(network,nthresh,time_slot):
                             addedslot=j
                     network[receiveNodeId].addedActiveSlot.add(addedslot)   
     return selected2
-    
+
+area=[[0 for i in range(1000)] for i in range(1000)]
 ## Select broadcast node by additional coverage area
 def ACASelect(network,nthresh,time_slot):    
     networkCopy=copyNetwork(network)
