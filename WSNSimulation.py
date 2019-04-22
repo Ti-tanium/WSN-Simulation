@@ -288,10 +288,12 @@ def ACASelect(network,nthresh,time_slot):
         Xm=math.ceil((node.x-node.broadcast_radius)*1)
         YM=math.ceil((node.y+node.broadcast_radius)*1)
         Ym=math.ceil((node.y-node.broadcast_radius)*1)
+        Xm=Xm if Xm>=0 else 0
+        Ym=Ym if Ym>=0 else 0
+        XM=XM if XM<=Xrange-1 else Xrange-1
+        YM=YM if YM<=Yrange-1 else Yrange-1
         for x in range(Xm,XM+1):
             for y in range(Ym,YM+1):
-                if(x<=0 or y<=0 or x>=1000 or y>=1000):
-                    continue
                 distance=((node.x-x/1)**2+(node.y-y/1)**2)**(1/2)
                 if(distance<node.broadcast_radius and area[x][y]==0):
                     area[x][y]=1
