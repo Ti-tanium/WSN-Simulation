@@ -372,7 +372,6 @@ def temporaryActive(network):
         selectedNodes.append(node);
     return selectedNodes
 
-def indexOfMax(adic):
 ## sink node start disseminating code
 def start_dissenminating(network,greedy,adaptive_duty_cycle,adaptive_radius,AC):
     ## total count of nodes already updated its code
