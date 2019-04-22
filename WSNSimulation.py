@@ -277,14 +277,12 @@ def ACASelect(network,nthresh,time_slot):
     networkCopy=copyNetwork(network)
     networkCopy=temporaryActive(networkCopy)
     selected1=[] # first round selection
-    selected2=[] # second round selection
     for node in networkCopy:
         if(node.updated==False):
             # skip unupdated nodes
             continue
         if(node.state!="ready"):
             continue
-            
         additionalCoverageArea=0
         XM=math.ceil((node.x+node.broadcast_radius)*1)
         Xm=math.ceil((node.x-node.broadcast_radius)*1)
